@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+	<title>Διαθέσιμα βιβλία</title>
+</head>
+<style>
+  body {
+    background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #ccc;
+  }
+  h1, h2, h3 {
+    text-align: center;
+    margin-top: 50px;
+  }
+  table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: 2px solid #ccc;
+  }
+  th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  .select-btn {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 8px 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 2px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  .search-form {
+    margin-bottom: 20px;
+  }
+}
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .search-input {
+    padding: 5px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+
+  .search-button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+
+</style>
+
+<body>
+  <h1>Δείτε τα διαθέσιμα βιβλία</h1>
+
+  <form method="post" action="{{ url_for('books', userID=userID, school_id=school_id) }}" class="search-form">
+    <div class="form-group">
+      <label for="subject_id">Subject:</label>
+      <select id="subject_id" name="subject_id">
+        <option value="all" {% if selected_subject_id == 'all' %}selected{% endif %}>All</option>
+        {% for subject in subjects %}
+          <option value="{{ subject[0] }}" {% if selected_subject_id == subject[0] %}selected{% endif %}>{{ subject[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="search_title">Title:</label>
+      <input type="text" id="search_title" name="search_title" class="search-input" value="{{ search_title }}">
+    </div>
+    <div class="form-group">
+      <label for="search_author">Author:</label>
+      <input type="text" id="search_author" name="search_author" class="search-input" value="{{ search_author }}">
+    </div>
+    <div class="form-group">
+      <label for="search_copies">Available Copies:</label>
+      <input type="number" id="search_copies" name="search_copies" class="search-input" value="{{ search_copies }}">
+    </div>
+    <button type="submit" class="search-button">Search</button>
+  </form>
+
+  {% if books %}
+  <table>
+    <thead>
+      <tr>
+        <th>ISBN</th>
+        <th>Τίτλος</th>
+        <th>Διαθεσιμότητα</th>
+        <th>Περισσότερες πληροφορίες</th>
+        <!--<th>Δανεισμός</th>-->
+        <th>Κράτηση</th>
+        <th>Αξιολόγηση</th>
+      </tr>
+    </thead>
+    <tbody>
+  {% for book in books %}
+  <tr>
+    <td>{{ book[0] }}</td>
+    <td>{{ book[1] }}</td>
+    {%if book[2] > 0%}
+    <td>Διαθέσιμο</td>
+    {%else%}
+    <td>Μη διαθέσιμο</td>
+    {%endif%}
+    <td><button class="select-btn" onclick="location.href='/books/{{ book[3] }}/{{ book[0] }}';">Περισσότερες πληροφορίες</button></td>
+    <!--
+    {% if is_stu == 1 %}
+      {% if book[2] > 0 and nums[0] < 2 and cn_ln %}
+        <td><button class="select-btn" onclick="location.href='/school/{{school_id}}/student/{{userID}}/newloan/{{book[0]}}';">Δανεισμός</button></td>
+      {% else %}
+        <td>Μη διαθέσιμο</td>
+      {% endif %}
+    {% else %}
+    {% if book[2] > 0 and nums[0] < 1 and cn_ln %}
+    <td><button class="select-btn" onclick="location.href='/under_construction';">Δανεισμός</button></td>
+  {% else %}
+    <td>Μη διαθέσιμο</td>
+    {% endif %}
+    {% endif %}
+  -->
+    {% if is_stu == 1 %}
+      {% if nums[1] < 2 and cn_ln %}
+        <td><button class="select-btn" onclick="location.href='/school/{{school_id}}/student/{{userID}}/newreservation/{{book[0]}}';">Κράτηση</button></td>
+      {% else %}
+        <td>Μη διαθέσιμο</td>
+      {% endif %}
+    {% else %}
+    {% if nums[1] < 1 and cn_ln %}
+    <td><button class="select-btn" onclick="location.href='/school/{{school_id}}/teacher/{{userID}}/newreservation/{{book[0]}}';">Κράτηση</button></td>
+    {% else %}
+    <td>Μη διαθέσιμο</td>
+    {% endif %}
+    {% endif %}
+    <td><button class="select-btn" onclick="location.href='/books/{{userID}}/{{ book[0] }}/write_review';">Αξιολόγηση</button></td>
+  </tr>
+  {% endfor %}
+</tbody>
+  </table>
+  {% else %}
+<h2>Δεν υπάρχουν βιβλία για τα κριτήρια που επιλέξατε</h2>
+{% endif %}
+<h3>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h3>
+</body>
+
+</html>

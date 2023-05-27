@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Δανεισμοί	 </title>
+</head>
+<body>
+  <h1>Δείτε τouς δανεισμούς σας</h1>
+  <div class="schools-list">
+    {% if tea_ln %}
+    {% for ln in tea_ln %}
+    <div class="school">
+      <p>ISBN: {{ ln[0] }}</p>
+      <p>Τίτλος Βιβλίου: {{ ln[1] }} </p>
+      <p>Ημερομηνία δανεισμού: {{ ln[2] }}</p>
+      <button class="select-btn" onclick="location.href='/school/{{schoolID}}/{{userID}}/delete_ln/{{res[3]}}';">Διαγραφή κράτησης</button>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p> Δεν έχετε δανεισμούς </p>
+    {% endif %}
+  </div>
+  <h2>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h2>
+</body>
+</html>

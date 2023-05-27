@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<style>
+      body {
+
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
+
+      h1 {
+        color: #333333;
+        text-align: center;
+      }
+
+      img {
+        display: block;
+        margin: auto;
+        max-width: 100%;
+        height: auto;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        margin-bottom: 5px;
+      }
+
+      strong {
+        font-weight: bold;
+      }
+    </style>
+  <head>
+    <title>Book Information</title>
+  </head>
+  <body>
+    <h1>Book Information</h1>
+    <img src="{{ book[3] }}" alt="Book" width="320" height="450">
+    <ul>
+      <li><strong>Title:</strong> {{ book[0] }}</li>
+      <li><strong>Author:</strong> {{ book[1] }}</li>
+      <li><strong>ISBN:</strong> {{ book[2] }}</li>
+      <li><strong>Publisher:</strong> {{ book[4] }}</li>
+      <li><strong>Keywords:</strong> {{ keyword[0][0] }}</li>
+      <li><strong>Available Copies:</strong> {{ book[5] }}</li>
+      <li><strong>Summary:</strong> {{ book[6] }}</li>
+      {% if average[0] is not none %}
+      <li><strong>Συνολική βαθμολογία:</strong> {{ '{:.2f}'.format(average[0]) }} / 5 </li>
+      <li><strong>Αξιολογήσεις χρηστών:</strong</li>
+        {% for review in reviews %}
+      <li><strong>O/H {{ review[0] }} {{ review[1] }} αξιολόγησε:</strong></li>
+      <li><strong>Αξιολόγηση:</strong> {{ review[2] }} / 5</li>
+      <li><strong>Σχόλια:</strong> {{ review[3] }}</li>
+      {% endfor %}
+      {% else %}
+      <li><strong>Αξιολογήσεις: Δεν υπάρχουν διαθέσιμες αξιολογήσεις ακόμη</strong></li>
+      {% endif %}
+    </ul>
+  </body><h2>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h2>
+</html>

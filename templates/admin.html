@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Page</title>
+		<style>
+	body {
+		background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+		background-size: cover;
+		font-family: Arial, sans-serif;
+		text-align: center;
+	}
+	h1, h2 {
+		margin-top: 50px;
+	  color: #ECF0F1  ;
+	}
+	table {
+		margin: 50px auto;
+		border-collapse: collapse;
+		background-color: #FFF;
+		box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+	}
+	th, td {
+		padding: 20px;
+		text-align: left;
+		border-bottom: 3px solid #CCC;
+	}
+	th {
+		background-color: #007BFF;
+		color: #FFF;
+	}
+
+  button {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 12px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin-top: 50px;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  }
+
+  button:hover {
+    background-color: #4CAF50;
+  }
+  .button {
+  display: block;
+  margin: 0 auto;
+  }
+  
+</style>
+  </head>
+  <body>
+    <h1>Welcome, {{ admin[1] }}!</h1>
+		<table>
+      <tr>
+        <th>Όνομα</th>
+        <th>Email</th>
+        <th>Username</th>
+      </tr>
+      <tr>
+          <td>{{ admin[1] }} {{ admin[2] }}</td>
+          <td>{{ admin[3] }}</td>
+          <td>{{ admin[4] }}</td>
+      </tr>
+    </table>
+  </body>
+  <div class = "center">
+  <button class="select-btn" onclick="location.href='/new_school';">Νέο σχολείο</button>
+  </div>
+  <p style="color: white"> Δείτε <a href="/handlers_list">εδώ</a> χειριστές </p>
+  <p style="color: white"> Δείτε <a href="/loans_by_school">εδώ</a> τους δανεισμούς </p>
+  <h2 style="color: white">Πατήστε  <a href="/query317">εδώ</a> για να για να δείτε όλους τους συγγραφείς που έχουν γράψει τουλάχιστον 5 βιβλία λιγότερα από τον
+συγγραφέα με τα περισσότερα βιβλία.</h2>
+<h2 style="color: white"> Δείτε <a href="/query314">εδώ</a> τους συγγραφείς των οποίων κανένα βιβλίο δεν έχει τύχει δανεισμού</h2>
+<h2 style="color: white"> Δείτε <a href="/query313">εδώ</a> τους νέους εκπαιδευτικούς (ηλικία < 40 ετών) που έχουν δανειστεί τα περισσότερα βιβλία και των αριθμό των βιβλίων</h2>
+<h2 style="color: white"> Δείτε <a href="/query312">εδώ</a> τους συγγραφείς που ανήκουν σε συγκεκριμένη κατηγορία και ποιοι εκπαιδευτικοί έχουν δανειστεί βιβλία αυτής της κατηγορίας το τελευταίο έτος</h2>
+<h2 style="color: white"> Δείτε <a href="/query316">εδώ</a> τα κορυφαία ζεύγη κατηγοριών βιβλίων που εμφανίστηκαν στους δανεισμούς</h2>
+<h2 style="color: white"> Δείτε <a href="/query315">εδώ</a> τους χειριστές ανά ζεύγη που έχουν δανείσει τον ίδιο αριθμό βιβλίων σε διάστημα ενός έτους με περισσότερους από 20 δανεισμούς</h2>
+
+  <h2 style="color: white">Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h2>
+</html>

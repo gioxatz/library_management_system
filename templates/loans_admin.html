@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Page</title>
+  </head>
+  <style>
+body {
+  background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+  background-size: cover;
+  font-family: Arial, sans-serif;
+}
+     .search-form {
+       margin-bottom: 20px;
+     }
+
+     label {
+       display: inline-block;
+       width: 120px;
+       font-weight: bold;
+     }
+
+     select {
+       margin-bottom: 10px;
+     }
+
+     .search-button {
+       margin-left: 120px;
+     }
+
+     ul {
+       list-style-type: none;
+       padding-left: 0;
+     }
+
+     li {
+       margin-bottom: 10px;
+     }
+     table {
+   		margin: 50px auto;
+   		border-collapse: collapse;
+   		background-color: #FFF;
+   		box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+   	}
+   	th, td {
+   		padding: 20px;
+   		text-align: left;
+   		border-bottom: 3px solid #CCC;
+   	}
+   	th {
+   		background-color: #007BFF;
+   		color: #FFF;
+   	}
+
+   </style>
+
+  <body>
+    <form method="post" action="/loans_by_school" class="search-form">
+      <label for="schoolID" style="color: white">Σχολείο:</label>
+       <select id="schoolID" name="schoolID">
+         <option value="all" {% if selected_schoolID == 'all' %}selected{% endif %}>Όλα τα σχολεία</option>
+         {% for school in schools %}
+         <option value="{{ school[0] }}" {% if selected_schoolID == school[0] %}selected{% endif %}>{{ school[1] }}</option>
+         {% endfor %}
+       </select>
+       <label for="year" style="color: white">Έτος δανεισμού:</label>
+       <select id="year" name="year">
+         <option value="">Όλα τα έτη</option>
+         {% for year in years %}
+         <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}</option>
+         {% endfor %}
+       </select>
+
+       <label for="month" style="color: white">Μήνας δανεισμού:</label>
+       <select id="month" name="month">
+         <option value="" >Όλοι οι μήνες</option>
+         {% for month in months %}
+         <option value="{{ month[0] }}" {% if selected_month == month[0] %}selected{% endif %}>{{ month[1] }} - {{ '{:02d}'.format(month[0]) }}</option>
+         {% endfor %}
+       </select>
+       <button type="submit" class="search-button" >Search</button>
+     </form>
+     {% if loans %}
+     <table>
+       <tr>
+         <th>#</th>
+         <th>Σχολείο:</th>
+         <th>Ημερομηνία δανεισμού</th>
+         <th>Ονοματεπώνυμο δανειζόμενου</th>
+         <th>Τίτλος βιβλίου</th>
+       </tr>
+
+       {% set counter = 0 %}
+      {% for loan in loans %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ loan[9] }}</td>
+        <td>{{ loan[3] }}</td>
+        <td>{{ loan[4] }} {{ loan[5] }}</td>
+        <td>{{ loan[10] }}</td>
+      </tr>
+
+      {% endfor %}
+     </table>
+     {% else %}
+     <p><strong>Δεν υπάρχουν δανεισμοί για τα κριτήρια που επιλέξατε</strong></p>
+     {% endif %}
+</body>
+<h2>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h2>
+</html>

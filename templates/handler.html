@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Χειριστής</title>
+		<style>
+	body {
+		background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+		background-size: cover;
+		font-family: Arial, sans-serif;
+		text-align: center;
+	}
+	h1, h2, h3 {
+		margin-top: 50px;
+	  color: #ECF0F1  ;
+	}
+  p {
+		margin-top: 50px;
+    font-family: Arial, sans-serif
+	  color: #4CAF50  ;
+    font-size: 24px;
+	}
+  table {
+    margin: 50px auto;
+    border-collapse: collapse;
+    background-color: #FFF;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 75%;
+  }
+
+  th, td {
+    padding: 10px; /* Reduce the padding to make the table cells smaller */
+    text-align: left;
+    border-bottom: 3px solid #CCC;
+  }
+
+  th {
+    background-color: #007BFF;
+    color: #FFF;
+    font-size: 18px; /* Adjust the font size as desired */
+  }
+
+  button {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 12px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin-top: 50px;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  }
+
+  button:hover {
+    background-color: #4CAF50;
+  }
+  .button {
+display: block;
+margin: 0 auto;
+}
+
+label {
+  font-size: 20px;
+  color: #459091;
+  margin-bottom: 12px;
+}
+
+/* Style for select */
+select {
+  font-size: 12px;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: none;
+}
+
+/* Style for select options */
+option {
+  font-size: 18px;
+  color: #333;
+}
+
+</style>
+</head>
+
+  <body>
+    <h1>Welcome, {{ handler[2] }}!</h1>
+		<table>
+      <tr>
+        <th>Όνομα</th>
+        <th>Email</th>
+        <th>Username</th>
+      </tr>
+      <tr>
+          <td>{{ handler[2] }} {{ handler[3] }}</td>
+          <td>{{ handler[6] }}</td>
+          <td>{{ handler[4] }}</td>
+      </tr>
+    </table>
+    <h2>Για να αλλάξετε τα στοιχεία σας, πατήστε <a href="/school/handler/modify_handler/{{handler[0]}}">ΕΔΩ</a>.</h2>
+    <h2>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h2>
+    <div class = "center">
+      <div class = "center">
+        <button class="select-btn" onclick="location.href='/school/handler/{{ handler[1] }}/{{ handler[0] }}/books';">Δείτε τα διαθέσιμα βιβλία</button>
+      </div>
+      <div class = "center">
+      <button class="select-btn" onclick="location.href='/school/{{handler[1]}}/newbook';">Καταχωρήστε ένα νέο βιβλίο</button>
+      </div>
+
+      <div class = "center">
+      <button class="select-btn" onclick="location.href='/school/{{handler[0]}}/{{handler[1]}}/see_teachers';">Εκπαιδευτικοί</button>
+      </div>
+      <div class = "center">
+      <button class="select-btn" onclick="location.href='/school/{{handler[0]}}/{{handler[1]}}/see_students';">Μαθητές</button>
+      </div>
+      <div class = "center">
+      <button class="select-btn" onclick="location.href='/school/{{handler[1]}}/all_loans';">Όλοι οι δανεισμοί</button>
+      </div>
+      <div class = "center">
+      <button class="select-btn" onclick="location.href='/school/{{handler[1]}}/loans_delayed';">Χρήστες με καθυστερημένο δανεισμό</button>
+      </div>
+      <div class = "center">
+      <button class="select-btn" onclick="location.href='/{{handler[1]}}/query323';">Μέσος όρος αξιολογήσεων ανά χρήστη και κατηγορία</button>
+      </div>
+    <table>
+    <thead>
+      <tr>
+        <th>userID</th>
+        <th>Όνομα</th>
+        <th>Επίθετο</th>
+        <th>email</th>
+        <th>Δανεισμοί</th>
+        <th>Κρατήσεις</th>
+        <th>Επεξεργασία στοιχείων</th>
+        <th>Ενεργοποίηση/Απενεργοποίηση</th>
+        <th>Διαγραφή χρήστη</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in tea_users %}
+      <tr>
+        <td>{{ user[0] }}</td>
+        <td>{{ user[2] }}</td>
+        <td>{{ user[3] }}</td>
+        <td>{{user[4]}}</td>
+        <td>{{user[10]}}</td>
+        <td>{{user[11]}}</td>
+        <td> <a href="/school/teacher/modify_teacher/{{user[0]}}">Επεξεργασία</a>
+        <td>
+          {% if user[7] == 1 %}
+            <form method="post" action="/school/handler/{{handler[0]}}/deactivate/{{ user[0] }}">
+              <button type="submit">Απενεργοποίηση</button>
+            </form>
+          {% else %}
+            <form method="post" action="/school/handler/{{handler[0]}}/activate/{{ user[0] }}">
+              <button type="submit">Ενεργοποίηση</button>
+            </form>
+          {% endif %}
+        </td>
+        <td><form method="post" action="/school/handler/{{ handler[0] }}/delete/{{ user[0] }}">
+          <button type="submit">Διαγραφή</button>
+        </form>
+      </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+    <h3> Μαθητές </h3>
+    <table>
+    <thead>
+      <tr>
+        <th>userID</th>
+        <th>Όνομα</th>
+        <th>Επίθετο</th>
+        <th>email</th>
+        <th>Δανεισμοί</th>
+        <th>Κρατήσεις</th>
+        <th>Επεξεργασία στοιχείων</th>
+        <th>Ενεργοποίηση/Απενεργοποίηση</th>
+        <th>Διαγραφή Χρήστη</th>
+        <th>Νέος Δανεισμός</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in stu_users %}
+      <tr>
+        <td>{{ user[0] }}</td>
+        <td>{{ user[2] }}</td>
+        <td>{{ user[3] }}</td>
+        <td>{{user[4]}}</td>
+        <td><a href="/school/student/{{handler[0]}}/{{user[0]}}/loans">{{user[10]}}</a></td>
+        <td><a href="/school/student/{{handler[0]}}/{{user[0]}}/reserv">{{user[11]}}</a></td>
+        <td><a href="/school/student/modify_student/{{handler[0]}}/{{user[0]}}">Επεξεργασία</a> </td>
+        <td>
+        {% if user[7] == 1 %}
+          <form method="post" action="/school/handler/{{handler[0]}}/deactivate/{{ user[0] }}">
+            <button type="submit1">Απενεργοποίηση</button>
+          </form>
+        {% else %}
+        <form method="post" action="/school/handler/{{handler[0]}}/activate/{{ user[0] }}">
+            <button type="submit1">Ενεργοποίηση</button>
+        </form>
+
+        {% endif %}
+      </td>
+      <td><form method="post" action="/school/handler/{{handler[0]}}/delete/{{ user[0] }}">
+        <button type="submit">Διαγραφή</button>
+      </form>
+    </td>
+    <td>
+      <form method="post" action="/school/{{user[0]}}/{{handler[1]}}/books">
+        <button type="submit">Nέος Δανεισμός</button>
+    </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+
+
+
+  </body>
+</html>

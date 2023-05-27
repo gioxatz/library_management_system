@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Κρατήσεις	 </title>
+</head>
+<body>
+  <h1>Δείτε τις κρατήσεις σας</h1>
+  <div class="schools-list">
+    {% if tea_res %}
+    {% for res in tea_res %}
+    <div class="school">
+      <p>ISBN: {{ res[0] }}</p>
+      <p>Τίτλος Βιβλίου: {{ res[1] }} </p>
+      <p>Ημερομηνία κράτησης: {{ res[2] }}</p>
+      <button class="select-btn" onclick="location.href='/school/{{schoolID}}/{{userID}}/delete_res/{{res[3]}}';">Διαγραφή κράτησης</button>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p> Δεν έχετε κρατήσεις </p>
+    {% endif %}
+  </div>
+  <h2>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h2>
+</body>
+</html>

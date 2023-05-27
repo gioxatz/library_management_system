@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Κρατήσεις</title>
+</head>
+<body>
+  <h1>Δείτε τις κρατήσεις του μαθητή</h1>
+  <div class="schools-list">
+    {% if stu_rs %}
+    {% for ln in stu_rs %}
+    <div class="school">
+      <p>ISBN: {{ ln[0] }}</p>
+      <p>Τίτλος Βιβλίου: {{ ln[1] }}</p>
+      <p>Ημερομηνία κράτησης: {{ ln[2] }}</p>
+      {% if ln[4] < 2 and cn_ln and ln[5] > 0 %}
+      <p>Αποδοχή δανεισμού</p>
+      <p><a href="/student/accept_loan/{{ userID }}/{{ ln[3] }}/{{ ln[0] }}">Αποδεχτείτε τον δανεισμό</a></p>
+      {% else %}
+      <p> Δεν μπορεί να γίνει αποδεκτός </p>
+      {% endif %}
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>Δεν υπάρχουν κρατήσεις</p>
+    {% endif %}
+  </div>
+  <h2>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h2>
+</body>
+</html>

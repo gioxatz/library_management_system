@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Νέο Σχολείο</title>
+  <style>
+    body {
+      background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 50px;
+      color: #ECF0F1;
+    }
+    table {
+      margin: 50px auto;
+      border-collapse: collapse;
+      background-color: #FFF;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 16px;
+      color: #222;
+      border-radius: 5px;
+      overflow: hidden;
+      width: 50%;
+    }
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #5F9EA0;
+      color: #FFF;
+      font-weight: bold;
+    }
+    input[type=text], input[type=password], input[type=email], input[type=username], input[type=submit] {
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border-radius: 4px;
+      width: 100%;
+      border: none;
+      border-bottom: 2px solid #ddd;
+      font-size: 16px;
+      color: #555;
+    }
+    button[type=submit] {
+      background-color: #5F9EA0;
+      color: #FFF;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button[type=submit]:hover {
+      background-color: #3F7F7F;
+    }
+  </style>
+</head>
+<body>
+  <h1>Εγγραφή νέου σχολείου</h1>
+  {% if message %}
+    <p style="color: red">{{ message }}</p>
+  {% endif %}
+  <table>
+    <form method="post" action="{{ url_for('new_school') }}">
+      <tr>
+        <th>Όνομα:</th>
+        <td><input type="text" id="name" name="name" required></td>
+      </tr>
+      <tr>
+        <th>Τηλέφωνο:</th>
+        <td><input type="text" id="phone" name="phone" required></td>
+      </tr>
+      <tr>
+        <th>Email:</th>
+        <td><input type="email" id="email" name="email" required></td>
+      </tr>
+      <tr>
+        <th>Οδός:</th>
+        <td><input type="str_name" id="str_name" name="str_name"></td>
+      </tr>
+      <tr>
+        <th>Αριθμός:</th>
+        <td><input type="str_number" id="str_number" name="str_number" required></td>
+      </tr>
+      <tr>
+        <th>Ταχυδρομικός κώδικας:</th>
+        <td><input type="zip_code" id="zip_code" name="zip_code" required></td>
+      </tr>
+      <tr>
+        <th>Πόλη:</th>
+        <td><input type="city" id="city" name="city" required></td>
+      </tr>
+      <tr>
+        <th>Όνομα Διευθυντή:</th>
+        <td><input type="d_name" id="d_name" name="d_name" required></td>
+      </tr>
+      <tr>
+        <th>Επώνυμο Διευθυντή:</th>
+        <td><input type="d_surname" id="d_surname" name="d_surname" required></td>
+      </tr>
+      <tr>
+        <th>Email Διευθυντή:</th>
+        <td><input type="email" id="d_email" name="d_email" required></td>
+      </tr>
+      <tr>
+        <th>Username Διευθυντή:</th>
+        <td><input type="d_username" id="d_username" name="d_username" required></td>
+      </tr>
+      <tr>
+        <th>Password Διευθυντή:</th>
+        <td><input type="password" id="d_password" name="d_password" required></td>
+      </tr>
+      <tr>
+        <th>Ημερομηνία Γέννησης Διευθυντή:</th>
+        <td><input type="date" id="d_date" name="d_date" required></td>
+      </tr>
+    <tr>
+      <td colspan="2"><input type="submit" value="Submit"></td>
+    </tr>
+  </form>
+</table>
+</body>
+</html>
