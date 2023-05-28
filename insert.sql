@@ -726,12 +726,6 @@ INSERT INTO handler (schoolID, firstname, lastname, username, password, email, a
 (1, 'Δημήτρης', 'Μαρκόπουλος', 'dmarkopoulos', 'password123', 'dmarkopoulos@example.com', 1),
 (2, 'Αλεξάνδρα', 'Καραμπέτη', 'akarampeti', 'password456', 'akarampeti@example.com', 1),
 (3, 'Γιώργος', 'Αντωνίδης', 'gantoniou', 'password789', 'gantoniou@example.com', 1),
-(1, 'Ελένη', 'Κουτσούμπα', 'ekoutsoumpa', 'password1234', 'ekoutsoumpa@example.com', 1),
-(2, 'Νίκος', 'Δημητρίου', 'ndimitriou', 'password4567', 'ndimitriou@example.com', 1),
-(3, 'Παναγιώτης', 'Σταυρόπουλος', 'pstavr', 'password12345', 'pstavr@example.com', 1),
-(1, 'Ανδρέας', 'Παππάς', 'apappas', 'password2231', 'apappas@example.com', 0),
-(2, 'Ελένη', 'Μακροπούλου', 'elmakr', 'password2049', 'elmakr@example.com', 0),
-(3, 'Σοφία', 'Κατσαρού', 'skats', 'password4', 'skats@example.com', 0),
 (4, 'Σοφία', 'Καλογεροπούλου', 'kalsof', 'password54', 'kalsof@example.com', 1);
 
 
@@ -1084,8 +1078,8 @@ INSERT INTO has_loan values(36, 52);
 
 INSERT INTO loans values(default, 9782081011305, default, default, default, default);
 UPDATE books SET available_copies = available_copies - 1 where ISBN = 9782081011305 and schoolID = 1;
-UPDATE student SET num_loans = num_loans + 1 where userID = 51;
-INSERT INTO has_loan values(37, 51);
+UPDATE student SET num_loans = num_loans + 1 where userID = 59;
+INSERT INTO has_loan values(37, 59);
 
 INSERT INTO loans values(default, 9782081011306, '2023-05-24', default, default, default);
 UPDATE books SET available_copies = available_copies - 1 where ISBN = 9782081011306 and schoolID = 2;
@@ -1121,10 +1115,10 @@ INSERT INTO has_loan values(45, 6);
 INSERT INTO loans values(default, 9780078022159, '2021-04-10', '2021-04-17', 0, 0);
 INSERT INTO has_loan values(46, 2);
 
-INSERT INTO loans values(default, 9780078022166, '2021-05-10', '2021-05-17', 0, 0);
+INSERT INTO loans values(default, 9782081011297, '2021-05-10', '2021-05-17', 0, 0);
 INSERT INTO has_loan values(47, 9);
 
-INSERT INTO loans values(default, 9780078022164, '2021-12-10', '2021-12-17', 0, 0);
+INSERT INTO loans values(default, 9782081011290, '2021-12-10', '2021-12-17', 0, 0);
 INSERT INTO has_loan values(48, 67);
 
 INSERT INTO loans values(default, 9782081011269, '2021-11-08', '2021-11-15', 0, 0);
@@ -1253,7 +1247,7 @@ INSERT INTO reservations values(default, 9782081011262, default, default);
 INSERT INTO has_reserv values(16, 75);
 
 INSERT INTO reservations values(default, 9782081011346, default, default);
-INSERT INTO has_reserv values(17, 98);
+INSERT INTO has_reserv values(17, 85);
 
 INSERT INTO reservations values(default, 9780809501632, default, default);
 INSERT INTO has_reserv values(18, 1);
