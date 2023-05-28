@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Μαθητής</title>
+		<style>
+	body {
+		background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+		background-size: cover;
+		font-family: Arial, sans-serif;
+		text-align: center;
+	}
+	h1, h2 {
+		margin-top: 50px;
+	  color: #ECF0F1  ;
+	}
+  p {
+		margin-top: 50px;
+    font-family: Arial, sans-serif
+	  color: #4CAF50  ;
+    font-size: 24px;
+	}
+	table {
+		margin: 50px auto;
+		border-collapse: collapse;
+		background-color: #FFF;
+		box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+	}
+	th, td {
+		padding: 20px;
+		text-align: left;
+		border-bottom: 3px solid #CCC;
+	}
+	th {
+		background-color: #007BFF;
+		color: #FFF;
+	}
+
+  button {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 24px;
+    margin-top: 50px;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  }
+
+  button:hover {
+    background-color: #4CAF50;
+  }
+  .button {
+display: block;
+margin: 0 auto;
+}
+
+label {
+  font-size: 25px;
+  color: #459091;
+  margin-bottom: 16px;
+}
+
+/* Style for select */
+select {
+  font-size: 16px;
+  padding: 16px 24px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: none;
+}
+
+/* Style for select options */
+option {
+  font-size: 18px;
+  color: #333;
+}
+
+</style>
+</head>
+
+  <body>
+    <h1>Welcome, {{ user[2] }}!</h1>
+		<table>
+      <tr>
+        <th>Όνομα</th>
+        <th>Email</th>
+        <th>Ημερομηνία γέννησης</th>
+        <th>Username</th>
+        <th>Δανεισμοί</th>
+        <th>Kρατήσεις</th>
+      </tr>
+      <tr>
+          <td>{{ user[2] }} {{ user[3] }}</td>
+          <td>{{ user[4] }}</td>
+          <td>{{ user[8] }}</td>
+          <td>{{ user[5] }}</td>
+          <td><a href="/school/{{user[1]}}/student/{{user[0]}}/loans">{{ user[10] }}</a></td>
+          <td> <a href="/school/{{user[1]}}/student/{{user[0]}}/reservations">{{ user[11] }}</a></td>
+      </tr>
+    </table>
+    <h2>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h2>
+    <div class = "center">
+      <button class="select-btn" onclick="location.href='/school/{{ user[0] }}/{{ user[1] }}/books';">Δείτε τα διαθέσιμα βιβλία</button>
+    </div>
+
+
+
+
+  </body>
+</html>

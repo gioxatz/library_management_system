@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+	<title>Συγγραφείς</title>
+</head>
+<body>
+  <h1> O συγγραφέας που έχει συγγράψει τα περισσότερα βιβλία είναι ο {{auth1[0]}} με {{auth1[1]}} βιβλία </h1>
+  {% if auths %}
+  <table>
+    <thead>
+      <tr>
+        <th>Συγγραφέας</th>
+        <th>Αριθμός συγγραμάτων</th>
+      </tr>
+    </thead>
+    <tbody>
+  {% for auth in auths %}
+  <tr>
+    <td>{{ auth[1] }}</td>
+    <td>{{ auth[2] }}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+  </table>
+  {% else %}
+<h2>Δεν υπάρχουν συγγραφείς για αυτά τα κριτήρια που επιλέξατε</h2>
+{% endif %}
+<h3>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h3>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Modify Teacher Information</title>
+  <style>
+    body {
+      background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 50px;
+      color: #ECF0F1;
+    }
+    table {
+      margin: 50px auto;
+      border-collapse: collapse;
+      background-color: #FFF;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 16px;
+      color: #222;
+      border-radius: 5px;
+      overflow: hidden;
+      width: 50%;
+    }
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #5F9EA0;
+      color: #FFF;
+      font-weight: bold;
+    }
+    input[type=text], input[type=password], input[type=email], input[type=username], input[type=submit] {
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border-radius: 4px;
+      width: 100%;
+      border: none;
+      border-bottom: 2px solid #ddd;
+      font-size: 16px;
+      color: #555;
+    }
+    button[type=submit] {
+      background-color: #5F9EA0;
+      color: #FFF;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button[type=submit]:hover {
+      background-color: #3F7F7F;
+    }
+  </style>
+</head>
+<body>
+  <h1>Εγγραφή νέου χρήστη</h1>
+  {% if message %}
+    <p style="color: red">{{ message }}</p>
+  {% endif %}
+  <table>
+    <form method="post" action="{{ url_for('student_registration', schoolID=schoolID) }}">
+      <tr>
+        <th>Ονομα:</th>
+        <td><input type="text" id="name" name="name" required></td>
+      </tr>
+      <tr>
+        <th>Επίθετο:</th>
+        <td><input type="text" id="surname" name="surname" required></td>
+      </tr>
+      <tr>
+        <th>Email:</th>
+        <td><input type="email" id="email" name="email" required></td>
+      </tr>
+      <tr>
+        <th>Ημερομηνία γέννησης:</th>
+        <td><input type="date" id="birthdate" name="birthdate"></td>
+      </tr>
+      <tr>
+        <th>Username:</th>
+        <td><input type="username" id="username" name="username" required></td>
+      </tr>
+      <tr>
+        <th>Password:</th>
+        <td><input type="password" id="password" name="password" required></td>
+      </tr>
+    <tr>
+      <td colspan="2"><input type="submit" value="Submit"></td>
+    </tr>
+  </form>
+</table>
+</body>
+</html>

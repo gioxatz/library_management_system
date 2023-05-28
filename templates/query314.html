@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+	<title>Συγγραφείς</title>
+</head>
+<body>
+  <h1>  Οι συγγραφείς των οποίων κανένα βιβλίο δεν έχει τύχει δανεισμού είναι οι παρακάτω</h1>
+  {% if auths %}
+  <table>
+    <thead>
+      <tr>
+        <th>Συγγραφέας</th>
+      </tr>
+    </thead>
+    <tbody>
+  {% for auth in auths %}
+  <tr>
+    <td>{{ auth[0] }}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+  </table>
+  {% else %}
+<h2>Όλοι οι συγγραφείς έχουν βιβλίο που έχει τύχει δανεισμού</h2>
+{% endif %}
+<h3>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h3>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+	<title>Χειριστές με ίδιο αριθμό δανεισμών</title>
+</head>
+<style>
+  body {
+    background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #ccc;
+  }
+  h1, h2, h3 {
+    text-align: center;
+    margin-top: 50px;
+  }
+  table {
+    margin: 0 auto;
+    border: 2px solid #ccc;
+  }
+  th, td, tr {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  </style>
+<body>
+  <form method="post" action="{{ url_for('query315')}}" class="search-form">
+    <div class="form-group">
+      <tr>
+        <th>Έτος:</th>
+        <td><input type="text" id="year" name="year" ></td>
+      </tr>
+    </div>
+    <button type="submit" class="search-button">Search</button>
+  </form>
+  {%if t%}
+  <h1>  Οι χειριστές κατά ζεύγη που έχουν δανείσει τον ίδιο αριθμό βιβλίων σε διάστημα ενός έτους με περισσότερα από 20 βιβλία είναι</h1>
+  {% if handls %}
+  <table>
+    <thead>
+      <tr>
+        <th>Χειριστής 1</th>
+        <th>Σχολείο χειριστή 1</th>
+        <th>Χειριστής 2</th>
+        <th>Σχολείο χειριστή 2</th>
+      </tr>
+    </thead>
+    <tbody>
+  {% for handl in handls %}
+  <tr>
+    <td>{{ handl[0] }} {{handl[1]}}</td>
+    <td> {{handl[4]}} </td>
+    <td>{{ handl[2] }} {{handl[3]}}</td>
+    <td> {{handl[5]}} </td>
+  </tr>
+  {% endfor %}
+</tbody>
+  </table>
+  {% else %}
+<h2>Δεν υπάρχουν αποτελέσματα για τα κριτήρια που επιλέξατε</h2>
+{% endif %}
+{% endif %}
+<h3>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h3>
+
+</body>
+</html>

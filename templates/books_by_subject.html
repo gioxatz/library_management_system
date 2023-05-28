@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Books by Subject</title>
+  </head>
+  <body>
+    <h1>Books on {{ subject_name }}</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th>Publisher</th>
+          <th>Available Copies</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+          <tr>
+            <td>{{ book[0] }}</td>
+            <td>{{ book[1] }}</td>
+            <td>{{ book[2] }}</td>
+            <td>{{ book[4] }}</td>
+            <td>{{ book[5] }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>
+
+
+
+        query = """
+          SELECT b.ISBN, b.title, b.available_copies, b.schoolID
+          FROM books b
+          JOIN has_subject hs ON b.ISBN = hs.ISBN
+          JOIN is_author ia ON b.ISBN = ia.ISBN
+          JOIN author a ON ia.authorID = a.authorID
+          WHERE b.schoolID = %s
+        """
+
+        # Add the filter for the subject category
+        if selected_subject_id != 'all':
+        query += "AND hs.subID = %s "
+        params.append(selected_subject_id)
+
+        # Add the filter for the book name
+        if search_name:
+        query += "AND b.title LIKE %s "
+        params.append(f"%{search_name}%")
+
+        # Add the filter for the author
+        if search_author:
+        query += "AND a.name LIKE %s "
+        params.append(f"%{search_author}%")
+
+        # Add the join conditions
+        query += "AND b.ISBN = hs.ISBN AND b.ISBN = ia.ISBN AND ia.authorID = a.authorID"
+
+        cursor = db.cursor()
+        cursor.execute(query, tuple(params))
+        books = cursor.fetchall()
+        cursor.close()

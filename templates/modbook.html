@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Modify Teacher Information</title>
+  <style>
+    body {
+      background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 50px;
+      color: #ECF0F1;
+    }
+    table {
+      margin: 50px auto;
+      border-collapse: collapse;
+      background-color: #FFF;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 16px;
+      color: #222;
+      border-radius: 5px;
+      overflow: hidden;
+      width: 50%;
+    }
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #5F9EA0;
+      color: #FFF;
+      font-weight: bold;
+    }
+    input[type=text], input[type=password], input[type=email], input[type=username], input[type=submit] {
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border-radius: 4px;
+      width: 100%;
+      border: none;
+      border-bottom: 2px solid #ddd;
+      font-size: 16px;
+      color: #555;
+    }
+    button[type=submit] {
+      background-color: #5F9EA0;
+      color: #FFF;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button[type=submit]:hover {
+      background-color: #3F7F7F;
+    }
+  </style>
+</head>
+<body>
+  <h1>Καταχώρηση νέου βιβλίου</h1>
+  <table>
+    <form method="post" action="{{ url_for('modify_book', isbn=isbn, schoolid=schoolid) }}">
+      <tr>
+        <th>ISBN:</th>
+        <td><input type="text" id="isbn" name="isbn" required value="{{ book[0] }}"></td>
+      </tr>
+      <tr>
+      <tr>
+        <th>Τίτλος:</th>
+        <td><input type="text" id="title" name="title" required value="{{ book[2] }}"></td>
+      </tr>
+      <tr>
+        <th>Εκδότης:</th>
+        <td><input type="text" id="publisher" name="publisher" required value="{{ book[3] }}" ></td>
+      </tr>
+      <tr>
+        <th>Συγγραφείς: (Αν είναι παραπάνω από ένας να χωρίζονται με κόμμα ',' και ένα κενό ' ')</th>
+        <td><input type="text" id="author" name="author" required value="{{book[10]}}"></td>
+      </tr>
+      <tr>
+        <th>Αριθμός Σελίδων:</th>
+        <td><input type="text" id="num_pages" name="num_pages" required value="{{book[9]}}"></td>
+      </tr>
+      <tr>
+        <th>Γλώσσα:</th>
+        <td><input type="text" id="lang" name="lang" required value="{{book[8]}}"></td>
+      </tr>
+      <tr>
+        <th>Συνολικά Αντίτυπα:</th>
+        <td><input type="text" id="copies" name="copies" required value="{{ book[4] }}"></td>
+      </tr>
+      <tr>
+        <th>Διαθέσιμα Αντίτυπα:</th>
+        <td><input type="text" id="available_copies" name="available_copies" required value="{{ book[7] }}"></td>
+      </tr>
+      <tr>
+        <th>Εικόνα(Εισάγετε το url της εικόνας):</th>
+        <td><input type="text" id="image" name="image" required value="{{ book[5] }}" ></td>
+      </tr>
+      <tr>
+        <th>Περίληψη:</th>
+        <td><input type="text" id="summary" name="summary" required value="{{ book[6] }}"></td>
+      </tr>
+      <tr>
+        <th>Kατηγορίες (Αν είναι παραπάνω από μία να χωρίζονται με κόμμα ',' και ένα κενό ' '):</th>
+        <td><input type="text" id="subjects" name="subjects" required value="{{subs}}"></td>
+      </tr>
+      <tr>
+        <th>Λέξεις Κλειδιά (Αν είναι παραπάνω από ενα να χωρίζονται με κόμμα ',' και ένα κενό ' '):</th>
+        <td><input type="text" id="keywords" name="keywords" required value="{{keys}}"></td>
+      </tr>
+    <tr>
+      <td colspan="2"><input type="submit" value="Submit"></td>
+    </tr>
+  </form>
+</table>
+</body>
+</html>

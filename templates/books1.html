@@ -1,0 +1,57 @@
+<html>
+<body>
+  <h1>Books of the School</h1>
+
+  <form method="post" action="{{ url_for('books', userID=userID, school_id=school_id) }}" class="search-form">
+    <div class="form-group">
+      <label for="subject_id">Subject:</label>
+      <select id="subject_id" name="subject_id">
+        <option value="all" {% if selected_subject_id == 'all' %}selected{% endif %}>All</option>
+        {% for subject in subjects %}
+          <option value="{{ subject[0] }}" {% if selected_subject_id == subject[0] %}selected{% endif %}>{{ subject[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="search_title">Title:</label>
+      <input type="text" id="search_title" name="search_title" class="search-input" value="{{ search_title }}">
+    </div>
+    <div class="form-group">
+      <label for="search_author">Author:</label>
+      <input type="text" id="search_author" name="search_author" class="search-input" value="{{ search_author }}">
+    </div>
+    <div class="form-group">
+      <label for="search_copies">Available Copies:</label>
+      <input type="number" id="search_copies" name="search_copies" class="search-input" value="{{ search_copies }}">
+    </div>
+    <button type="submit" class="search-button">Search</button>
+  </form>
+
+  {% if books %}
+  <table>
+    <thead>
+      <tr>
+        <th>ISBN</th>
+        <th>Title</th>
+        <th>Available Copies</th>
+        <th>Author</th>
+        <th>Subject</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+      <tr>
+        <td>{{ book[0] }}</td>
+        <td>{{ book[1] }}</td>
+        <td>{{ book[2] }}</td>
+        <td>{{ book[3] }}</td>
+        <td>{{ book[4] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <h2>No books available for this school.</h2>
+  {% endif %}
+</body>
+</html>

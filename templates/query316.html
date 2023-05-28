@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+	<title>3 Kορυφαία (top-3) ζεύγη που εμφανίστηκαν σε δανεισμούς</title>
+</head>
+<style>
+body {
+background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+background-size: cover;
+font-family: Arial, sans-serif;
+text-align: center;
+}
+h1, h2, h3 {
+margin-top: 50px;
+color: #ECF0F1  ;
+}
+table {
+margin: 50px auto;
+border-collapse: collapse;
+background-color: #FFF;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+th, td {
+padding: 20px;
+text-align: left;
+border-bottom: 3px solid #CCC;
+}
+th {
+background-color: #007BFF;
+color: #FFF;
+}
+
+</style>
+<body>
+  <h1> Tα 3 κορυφαία (top-3) ζεύγη κατηγοριών που εμφανίστηκαν σε δανεισμούς είναι τα παρακάτω</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Κατηγορία 1</th>
+        <th>Κατηγορία 2</th>
+        <th>Αριθμός εμφανίσεων</th>
+      </tr>
+    </thead>
+    <tbody>
+  {% for couple in couples %}
+  <tr>
+    <td>{{ couple[0] }}</td>
+    <td>{{ couple[1] }} </td>
+    <td>{{ couple[2] }}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+  </table>
+
+<h3>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h3>
+
+</body>
+</html>

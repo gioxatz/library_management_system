@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+	<title>Συγγραφείς ανά κατηγορία</title>
+</head>
+<style>
+  body {
+    background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #ccc;
+  }
+  h1, h2, h3 {
+    text-align: center;
+    margin-top: 50px;
+  }
+  table {
+    margin: 0 auto;
+    border: 2px solid #ccc;
+  }
+  th, td, tr {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  </style>
+<body>
+  <form method="post" action="{{ url_for('query312')}}" class="search-form">
+    <div class="form-group">
+      <label for="subject_id">Subject:</label>
+      <select id="subject_id" name="subject_id">
+        <option value="all" {% if selected_subject_id == 'all' %}selected{% endif %}>All</option>
+        {% for subject in subjects %}
+          <option value="{{ subject[0] }}" {% if selected_subject_id == subject[0] %}selected{% endif %}>{{ subject[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="search-button">Search</button>
+  </form>
+  {% if aut_tea %}
+  <table>
+    <thead>
+      <tr>
+        <th>Τύπος</th>
+        <th>Όνομα</th>
+      </tr>
+    </thead>
+    <tbody>
+  {% for aut in aut_tea %}
+  <tr>
+    {%if aut[2] == 'Author' %}
+    <td>{{ aut[2] }} </td>
+    <td> {{aut[0]}} </td>
+    {%else%}
+    <td> {{aut[2]}} </td>
+    <td>{{ aut[0] }} {{aut[1]}}</td>
+    {%endif%}
+  </tr>
+  {% endfor %}
+</tbody>
+  </table>
+  {% else %}
+<h2>Δεν υπάρχουν καταχωρήσεις για τα κριτήρια που επιλέξατε</h2>
+{% endif %}
+<h3>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h3>
+
+</body>
+</html>

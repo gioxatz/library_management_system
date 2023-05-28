@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Κατάσταση χειριστών</title>
+</head>
+<style>
+body {
+background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+background-size: cover;
+font-family: Arial, sans-serif;
+text-align: center;
+}
+h1, h2, h3 {
+margin-top: 50px;
+color: #ECF0F1  ;
+}
+p {
+margin-top: 50px;
+font-family: Arial, sans-serif
+color: #4CAF50  ;
+font-size: 24px;
+}
+table {
+margin: 50px auto;
+border-collapse: collapse;
+background-color: #FFF;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+width: 75%;
+}
+
+th, td {
+padding: 10px; /* Reduce the padding to make the table cells smaller */
+text-align: left;
+border-bottom: 3px solid #CCC;
+}
+
+th {
+background-color: #007BFF;
+color: #FFF;
+font-size: 18px; /* Adjust the font size as desired */
+}
+
+button {
+background-color: #008CBA;
+border: none;
+color: white;
+padding: 12px 25px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 18px;
+margin-top: 50px;
+cursor: pointer;
+border-radius: 12px;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+button:hover {
+background-color: #4CAF50;
+}
+.button {
+display: block;
+margin: 0 auto;
+}
+
+label {
+font-size: 20px;
+color: #459091;
+margin-bottom: 12px;
+}
+
+/* Style for select */
+select {
+font-size: 12px;
+padding: 12px 20px;
+border: 1px solid #ddd;
+border-radius: 4px;
+background-color: #fff;
+box-shadow: none;
+}
+
+/* Style for select options */
+option {
+font-size: 18px;
+color: #333;
+}
+
+</style>
+<body>
+<table>
+<thead>
+  <tr>
+    <th>handlerID</th>
+    <th>Σχολείο</th>
+    <th>Όνομα</th>
+    <th>Επίθετο</th>
+    <th>email</th>
+    <th>Επεξεργασία στοιχείων</th>
+    <th>Ενεργοποίηση/Απενεργοποίηση</th>
+    <th>Διαγραφή χειριστή</th>
+  </tr>
+</thead>
+<tbody>
+  {% for handler in handlers %}
+  <tr>
+    <td>{{ handler[0] }}</td>
+    <td>{{ handler[8] }}</td>
+    <td>{{ handler[2] }}</td>
+    <td>{{handler[3]}}</td>
+    <td>{{handler[6]}}</td>
+    <td> <a href="/school/handler/modify_handler/{{handler[0]}}">Επεξεργασία</a>
+    <td>
+      {% if handler[7] == 1 %}
+        <form method="post" action="/school/{{handler[0]}}/deactivate }}">
+          <button type="submit">Απενεργοποίηση</button>
+        </form>
+      {% else %}
+        <form method="post" action="/school/{{handler[0]}}/activate">
+          <button type="submit">Ενεργοποίηση</button>
+        </form>
+      {% endif %}
+    </td>
+    <td><form method="post" action="/school/{{ handler[0] }}/delete">
+      <button type="submit">Διαγραφή</button>
+    </form>
+  </td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+</body>
+</html>

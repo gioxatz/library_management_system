@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+	<title>{{ school[1] }} - School Details</title>
+	<style>
+		body {
+			background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+			background-repeat: no-repeat;
+			background-size: cover;
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			color: #ccc;
+		}
+		h1, h2, h3 {
+			text-align: center;
+			margin-top: 50px;
+		}
+		table {
+			margin: 0 auto;
+			border-collapse: collapse;
+			border: 2px solid #ccc;
+		}
+		th, td {
+			padding: 10px;
+			border: 1px solid #ccc;
+		}
+    button {
+			background-color: #008CBA;
+			border: none;
+			color: white;
+			padding: 16px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 24px;
+			margin-top: 50px;
+			cursor: pointer;
+			border-radius: 12px;
+			box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		}
+
+		button:hover {
+			background-color: #4CAF50;
+		}
+    .button {
+  display: block;
+  margin: 0 auto;
+  }
+	</style>
+</head>
+<body>
+	<h1> {{ school[1] }} </h1>
+  <h2>Καλωσήρθατε στην βιβλιοθήκη του σχολείου μας</h2>
+  <h3>Παρακάτω μπορείτε να βρείτε τις πληροφορίες του σχολείου </h3>
+	<table>
+		<tr>
+			<th>Όνομα Σχολείου</th>
+			<td>{{ school[1] }}</td>
+		</tr>
+		<tr>
+			<th>Email</th>
+			<td>{{ school[2] }}</td>
+		</tr>
+		<tr>
+			<th>Τηλέφωνο</th>
+			<td>{{ school[3] }}</td>
+		</tr>
+		<tr>
+			<th>Διεύθυνση</th>
+			<td>{{ school[4] }}, {{ school[5] }}, {{ school[6] }}, {{ school[7] }}</td>
+		</tr>
+    <tr>
+			<th>Διευθυντής</th>
+			<td>{{ school[8] }} {{school[9]}}</td>
+		</tr>
+	</table>
+  <div class = "center">
+  <button align = "center" class="select-btn" onclick="location.href='/school/{{school[0]}}/studentlogin';">Εισέλθετε ως μαθητής</button>
+  </div>
+  <div class = "center">
+  <button class="select-btn" onclick="location.href='/school/{{school[0]}}/teacherlogin';">Εισέλθετε ως καθηγητής</button>
+  </div>
+  <div class = "center">
+  <button class="select-btn" onclick="location.href='/school/{{school[0]}}/handlerlogin';">Εισέλθετε ως χειριστής της βιβλιοθήκης</button>
+  </div>
+  <h2>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h2>
+
+
+</body>
+</html>
