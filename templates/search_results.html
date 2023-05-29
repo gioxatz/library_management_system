@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results</h1>
+    <h2>Search query: {{ title }}</h2>
+    <ul>
+        {% for book in books %}
+            <li>{{ book.title }} - Copies available: {{ book.available_copies }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
