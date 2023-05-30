@@ -132,14 +132,14 @@ INSERT INTO books VALUES ( 9782081011348 , 4 , " India's Legal System ",' Harper
 
   
   
-INSERT INTO author values(default, "Nikola Tesla");
-INSERT INTO author values(default, "P.S.R. Murty");
-INSERT INTO author values(default, "Avi Silberschatz");
-INSERT INTO author values(default, "Henry F. Korth");
-INSERT INTO author values(default, "S. Sudarshan");
-INSERT INTO author values(default, "Bjarne Stroustrup");
-INSERT INTO author values(default, "WESTFALL RICHARD S.");
-insert into author (name) values ('Reginald Baudon');
+  INSERT INTO author values(default, "Nikola Tesla");
+  INSERT INTO author values(default, "P.S.R. Murty");
+  INSERT INTO author values(default, "Avi Silberschatz");
+  INSERT INTO author values(default, "Henry F. Korth");
+  INSERT INTO author values(default, "S. Sudarshan");
+  INSERT INTO author values(default, "Bjarne Stroustrup");
+  INSERT INTO author values(default, "WESTFALL RICHARD S.");
+  insert into author (name) values ('Reginald Baudon');
 insert into author (name) values ('Meir Sutcliff');
 insert into author (name) values ('Theresa Pirot');
 insert into author (name) values ('Brit Garrod');
@@ -185,22 +185,24 @@ INSERT INTO author (name) VALUES (' Camus Albert ');
 INSERT INTO author (name) VALUES (' Doyle Arthur Conan ');
   
   
-INSERT INTO is_author values(9780809501632, 1);
-INSERT INTO is_author values(9780081011249, 2);
-INSERT INTO is_author values(9780078022159, 3);
-INSERT INTO is_author values(9780078022159, 4);
-INSERT INTO is_author values(9780078022159, 5);
-INSERT INTO is_author values(9789603322092, 6);
-INSERT INTO is_author values(9789607309471, 7);
-INSERT INTO is_author  VALUES ( 9782081011249 ,  1 );
+  INSERT INTO is_author values(9780809501632, 1);
+  INSERT INTO is_author values(9780081011249, 2);
+  INSERT INTO is_author values(9780078022159, 3);
+  INSERT INTO is_author values(9780078022159, 4);
+  INSERT INTO is_author values(9780078022159, 5);
+  INSERT INTO is_author values(9789603322092, 6);
+  INSERT INTO is_author values(9789607309471, 7);
+  INSERT INTO is_author  VALUES ( 9782081011249 ,  1 );
 INSERT INTO is_author  VALUES ( 9782081011250 ,  2 );
 INSERT INTO is_author  VALUES ( 9782081011251 ,  3 );
 INSERT INTO is_author  VALUES ( 9782081011252 ,  4 );
 INSERT INTO is_author  VALUES ( 9782081011253 ,  5 );
 INSERT INTO is_author  VALUES ( 9782081011254 ,  6 );
 INSERT INTO is_author  VALUES ( 9782081011255 ,  7 );
+
 INSERT INTO is_author  VALUES ( 9782081011256 ,  15 );
 INSERT INTO is_author  VALUES ( 9782081011257 ,  22 );
+
 INSERT INTO is_author  VALUES ( 9782081011258 ,  10 );
 INSERT INTO is_author  VALUES ( 9782081011259 ,  11 );
 INSERT INTO is_author  VALUES ( 9782081011260 ,  12 );
@@ -382,7 +384,7 @@ INSERT INTO is_author  VALUES ( 9782081011335 ,  40 );
   INSERT INTO has_keywords VALUES( 9789607309471, 8);
   INSERT INTO has_keywords VALUES( 9789607309471, 9);
   
-INSERT INTO has_subject  VALUES ( 9782081011249 ,  1 );
+ INSERT INTO has_subject  VALUES ( 9782081011249 ,  1 );
 INSERT INTO has_subject  VALUES ( 9782081011250 ,  2 );
 INSERT INTO has_subject  VALUES ( 9782081011251 ,  3 );
 INSERT INTO has_subject  VALUES ( 9782081011252 ,  4 );
@@ -724,6 +726,12 @@ INSERT INTO handler (schoolID, firstname, lastname, username, password, email, a
 (1, 'Δημήτρης', 'Μαρκόπουλος', 'dmarkopoulos', 'password123', 'dmarkopoulos@example.com', 1),
 (2, 'Αλεξάνδρα', 'Καραμπέτη', 'akarampeti', 'password456', 'akarampeti@example.com', 1),
 (3, 'Γιώργος', 'Αντωνίδης', 'gantoniou', 'password789', 'gantoniou@example.com', 1),
+(1, 'Ελένη', 'Κουτσούμπα', 'ekoutsoumpa', 'password1234', 'ekoutsoumpa@example.com', 1),
+(2, 'Νίκος', 'Δημητρίου', 'ndimitriou', 'password4567', 'ndimitriou@example.com', 1),
+(3, 'Παναγιώτης', 'Σταυρόπουλος', 'pstavr', 'password12345', 'pstavr@example.com', 1),
+(1, 'Ανδρέας', 'Παππάς', 'apappas', 'password2231', 'apappas@example.com', 0),
+(2, 'Ελένη', 'Μακροπούλου', 'elmakr', 'password2049', 'elmakr@example.com', 0),
+(3, 'Σοφία', 'Κατσαρού', 'skats', 'password4', 'skats@example.com', 0),
 (4, 'Σοφία', 'Καλογεροπούλου', 'kalsof', 'password54', 'kalsof@example.com', 1);
 
 
@@ -816,7 +824,7 @@ INSERT INTO student (userID) VALUES ( 84 );
 INSERT INTO student (userID) VALUES ( 85 );
   
   
- UPDATE users SET birthdate = ('2007-1-7') where userID = 31;
+UPDATE users SET birthdate = ('2007-1-7') where userID = 31;
 UPDATE users SET birthdate = ('2007-12-7') where userID = 32;
 UPDATE users SET birthdate = ('2006-7-4') where userID = 33;
 UPDATE users SET birthdate = ('2007-2-12') where userID = 34;
@@ -1003,7 +1011,7 @@ UPDATE books SET available_copies = available_copies - 1 where ISBN = 9780809501
 UPDATE student SET num_loans = num_loans + 1 where userID = 58;
 INSERT INTO has_loan values(16, 58);
 
-INSERT INTO loans values(default, 9782081011322, 2023-04-01, default, default, default);
+INSERT INTO loans values(default, 9782081011322, default, default, default, default);
 UPDATE books SET available_copies = available_copies - 1 where ISBN = 9782081011322 and schoolID = 3;
 UPDATE student SET num_loans = num_loans + 1 where userID = 72;
 INSERT INTO has_loan values(17, 72);
@@ -1068,7 +1076,7 @@ UPDATE books SET available_copies = available_copies - 1 where ISBN = 9782081011
 UPDATE student SET num_loans = num_loans + 1 where userID = 53;
 INSERT INTO has_loan values(35, 53);
 
-INSERT INTO loans values(default, 9782081011303, '2023-05-25', default, default, default);
+INSERT INTO loans values(default, 9782081011303, '2023-05-23', default, default, default);
 UPDATE books SET available_copies = available_copies - 1 where ISBN = 9782081011303 and schoolID = 2;
 UPDATE student SET num_loans = num_loans + 1 where userID = 52;
 INSERT INTO has_loan values(36, 52);
@@ -1139,6 +1147,65 @@ INSERT INTO has_loan values(54, 61);
 
 INSERT INTO loans values(default, 9782081011279, '2021-02-02', '2021-02-15', 0, 0);
 INSERT INTO has_loan values(55, 57);
+
+INSERT INTO loans VALUES (default, '9782081011250', '2021-04-15', '2021-04-22', 0, 0);
+INSERT INTO has_loan VALUES (56, 55);
+
+INSERT INTO loans VALUES (default, '9782081011249', '2021-09-07', '2021-09-14', 0, 0);
+INSERT INTO has_loan VALUES (57, 14);
+INSERT INTO loans VALUES (default, '9782081011262', '2021-09-05', '2021-09-12', 0, 0);
+INSERT INTO has_loan VALUES (58, 17);
+INSERT INTO loans VALUES (default, '9782081011251', '2021-01-23', '2021-01-30', 0, 0);
+INSERT INTO has_loan VALUES (59, 19);
+INSERT INTO loans VALUES (default, '9782081011262', '2021-01-08', '2021-01-15', 0, 0);
+INSERT INTO has_loan VALUES (60, 20);
+INSERT INTO loans VALUES (default, '9782081011309', '2021-02-09', '2021-02-16', 0, 0);
+INSERT INTO has_loan VALUES (61, 25);
+INSERT INTO loans VALUES (default, '9782081011250', '2021-01-10', '2021-01-17', 0, 0);
+INSERT INTO has_loan VALUES (62, 26);
+INSERT INTO loans VALUES (default, '9782081011257', '2021-10-30', '2021-11-06', 0, 0);
+INSERT INTO has_loan VALUES (63, 28);
+INSERT INTO loans VALUES (default, '9782081011249', '2021-07-03', '2021-07-10', 0, 0);
+INSERT INTO has_loan VALUES (64, 34);
+INSERT INTO loans VALUES (default, '9782081011250', '2021-11-27', '2021-12-03', 0, 0);
+INSERT INTO has_loan VALUES (65, 35);
+INSERT INTO loans VALUES (default, '9782081011262', '2021-07-30', '2021-08-06', 0, 0);
+INSERT INTO has_loan VALUES (66, 41);
+INSERT INTO loans VALUES (default, '9782081011249', '2021-05-08', '2021-05-15', 0, 0);
+INSERT INTO has_loan VALUES (67, 43);
+INSERT INTO loans VALUES (default, '9782081011301', '2021-10-30', '2021-11-06', 0, 0);
+INSERT INTO has_loan VALUES (68, 45);
+INSERT INTO loans VALUES (default, '9782081011309', '2021-07-27', '2021-08-03', 0, 0);
+INSERT INTO has_loan VALUES (69, 46);
+
+
+INSERT INTO loans VALUES (default, '9782081011309', '2021-01-01', '2021-01-08', 0, 0);
+INSERT INTO has_loan VALUES (70, 12);
+INSERT INTO loans VALUES (default, '9782081011250', '2021-05-07', '2021-05-14', 0, 0);
+INSERT INTO has_loan VALUES (71, 15);
+INSERT INTO loans VALUES (default, '9782081011306', '2021-12-07', '2021-12-14', 0, 0);
+INSERT INTO has_loan VALUES (72, 24);
+INSERT INTO loans VALUES (default, '9782081011257', '2021-11-08', '2021-11-15', 0, 0);
+INSERT INTO has_loan VALUES (73, 27);
+INSERT INTO loans VALUES (default, '9782081011306', '2021-03-11', '2021-03-18', 0, 0);
+INSERT INTO has_loan VALUES (74, 29);
+INSERT INTO loans VALUES (default, '9782081011306', '2021-07-03', '2021-07-10', 0, 0);
+INSERT INTO has_loan VALUES (75, 30);
+INSERT INTO loans VALUES (default, '9782081011309', '2021-11-01', '2021-11-08', 0, 0);
+INSERT INTO has_loan VALUES (76, 31);
+INSERT INTO loans VALUES (default, '9782081011270', '2021-09-08', '2021-09-15', 0, 0);
+INSERT INTO has_loan VALUES (77, 33);
+INSERT INTO loans VALUES (default, '9782081011262', '2021-05-28', '2021-06-04', 0, 0);
+INSERT INTO has_loan VALUES (78, 36);
+INSERT INTO loans VALUES (default, '9782081011306', '2021-04-13', '2021-04-20', 0, 0);
+INSERT INTO has_loan VALUES (79, 38);
+INSERT INTO loans VALUES (default, '9782081011250', '2021-02-16', '2021-02-23', 0, 0);
+INSERT INTO has_loan VALUES (80, 39);
+INSERT INTO loans VALUES (default, '9782081011250', '2021-09-09', '2021-09-16', 0, 0);
+INSERT INTO has_loan VALUES (81, 42);
+INSERT INTO loans VALUES (default, '9782081011262', '2021-09-26', '2021-10-03', 0, 0);
+INSERT INTO has_loan VALUES (82, 48);
+
 
 
 INSERT INTO review VALUES (default, 9782081011257 , 13, default, 3, "Μέτριο βιβλίο"); 
@@ -1292,8 +1359,6 @@ INSERT INTO has_reserv values(31, 29);
 INSERT INTO reservations values(default, 9782081011301, default, default);
 INSERT INTO has_reserv values(32, 28);
 
-
-
 INSERT INTO reservations values(default, 9782081011328, default, default);
 INSERT INTO has_reserv values(33, 31);
 
@@ -1329,3 +1394,6 @@ INSERT INTO has_reserv values(43, 72);
 
 INSERT INTO reservations values(default, 9782081011288, default, default);
 INSERT INTO has_reserv values(44, 11);
+
+
+
