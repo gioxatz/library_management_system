@@ -95,6 +95,7 @@ def admin(adminID):
         return render_template('admin.html', admin=admin)
 
 
+
 def generate_insert_statements(table_name, cursor, backup_file):
     query = f'SELECT * FROM {table_name}'
     cursor.execute(query)
@@ -102,7 +103,7 @@ def generate_insert_statements(table_name, cursor, backup_file):
     data = cursor.fetchall()
 
     for row in data:
-        values = ', '.join([f'"{value}"' if isinstance(value, str) else str(value) for value in row])        
+        values = ', '.join([f'"{value}"' if isinstance(value, (str, datetime.date)) else str(value) for value in row])        
         insert_statement = f"INSERT INTO {table_name} VALUES ({values});\n"
         backup_file.write(insert_statement)
 
@@ -128,10 +129,10 @@ def generate_insert_statements_for_teacher(cursor, backup_file):
             insert_statement = f"INSERT INTO teacher(userID, num_loans) VALUES ({values});\n"
             backup_file.write(insert_statement) 
             
-@app.route('/backup', methods=['POST'])
+@app.route('/backup')
 def backup():
     cursor = db.cursor()
-    with open('lib1_backup.sql', 'w') as backup_file:
+    with open('lib1_backup.sql', 'w', encoding='utf-8') as backup_file:
         tables = ['schools', 'books', 'author', 'is_author', 'subjects', 'keywords', 'has_keywords', 'has_subject',
               'users', 'handler', 'admin', 'school_director', 'review']
         for table_name in tables:
@@ -148,25 +149,32 @@ def backup():
     return redirect(url_for('welcome', message = 'Επιτυχές backup'))
 
 
-@app.route('/restore', methods=['POST'])
+@app.route('/restore')
 def restore_database():
-
     cursor = db.cursor()
-    tables = ['student', 'teacher', 'has_laon', 'has_reserv', 'reservations', 'loans', 'review', 'school_director', 'admin', 'handler', 'users', 'has_subject', 'has_keywords', 'keywords','subjects', 'is_author', 'author', 'books', 'schools']
+    cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+
+    tables = ['student', 'teacher', 'has_loan', 'has_reserv', 'reservations', 'loans', 'review', 'school_director', 'admin', 'handler', 'users', 'has_subject', 'has_keywords', 'keywords', 'subjects', 'is_author', 'author', 'books', 'schools']
     for table in tables:
-        cursor.execute("TRUNCATE TABLE %s", (table,))
+        truncate_query = f"TRUNCATE TABLE {table}"
+        cursor.execute(truncate_query)
         db.commit()
 
-    with open('lib1_backup.sql', 'r') as backup_file:
+    with open('lib1_backup.sql', 'r', encoding='utf-8') as backup_file:
         sql_statements = backup_file.read()
 
-    cursor.execute(sql_statements)
+    # Split the SQL statements by semicolon and execute them one by one
+    statements = sql_statements.split(';')
+    for statement in statements:
+        if statement.strip() != '':
+            cursor.execute(statement)
+            db.commit()
 
+    cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
     db.commit()
     cursor.close()
-    connection.close()
 
-    return redirect(url_for('welcome', message = 'Επιτυχές restoration'))  
+    return redirect(url_for('welcome', message='Επιτυχές restoration'))
 
     
 @app.route('/adminlogout')
@@ -358,12 +366,12 @@ def loans_by_school():
         selected_month = request.form['month']
         
         params = []
-        q1 = """SELECT l.loanID, hs.userID, l.ISBN, l.loan_date, u.name, u.surname, l.pending, l.active, u.schoolID, s.name, b.title
+        q1 = """SELECT distinct l.loanID, u.userID, l.ISBN, l.loan_date, u.name, u.surname, l.pending, l.active, u.schoolID, s.name, b.title
                 FROM loans l
                 JOIN has_loan hs ON hs.loanID = l.loanID
                 JOIN users u ON u.userID = hs.userID
                 JOIN schools s ON s.schoolID = u.schoolID
-                JOIN books b ON b.ISBN = l.ISBN AND b.schoolID = s.schoolID
+                JOIN books b ON b.ISBN = l.ISBN 
                 """
         if selected_schoolID != 'all':
             q1 += "AND s.schoolID = %s "
@@ -389,12 +397,12 @@ def loans_by_school():
     
     else:
         c11 = db.cursor()
-        q11 = """SELECT l.loanID, hs.userID, l.ISBN, l.loan_date, u.name, u.surname, l.pending, l.active, u.schoolID, s.name, b.title
+        q11 = """SELECT distinct l.loanID, u.userID, l.ISBN, l.loan_date, u.name, u.surname, l.pending, l.active, u.schoolID, s.name, b.title
                 FROM loans l
                 JOIN has_loan hs ON hs.loanID = l.loanID
                 JOIN users u ON u.userID = hs.userID
                 JOIN schools s ON s.schoolID = u.schoolID
-                JOIN books b ON b.ISBN = l.ISBN AND b.schoolID = s.schoolID
+                JOIN books b ON b.ISBN = l.ISBN 
                 """
         c11.execute(q11, )
         loans = c11.fetchall()
@@ -412,11 +420,11 @@ def loans_of_school(schoolID):
         selected_month = request.form['month']
         
         params = []
-        q1 = """SELECT l.loanID, hs.userID, l.ISBN, l.loan_date, u.name, u.surname, l.pending, l.active, u.schoolID,  b.title
+        q1 = """SELECT distinct l.loanID, hs.userID, l.ISBN, l.loan_date, u.name, u.surname, l.pending, l.active, u.schoolID,  b.title
                 FROM loans l
                 JOIN has_loan hs ON hs.loanID = l.loanID
                 JOIN users u ON u.userID = hs.userID
-                JOIN books b ON b.ISBN = l.ISBN AND b.schoolID = u.schoolID
+                JOIN books b ON b.ISBN = l.ISBN 
                 Where u.schoolID = %s
                 """
 
@@ -442,11 +450,11 @@ def loans_of_school(schoolID):
     
     else:
         c11 = db.cursor()
-        q11 = """SELECT l.loanID, hs.userID, l.ISBN, l.loan_date, u.name, u.surname, l.pending, l.active, u.schoolID,  b.title
+        q11 = """SELECT distinct l.loanID, hs.userID, l.ISBN, l.loan_date, u.name, u.surname, l.pending, l.active, u.schoolID,  b.title
                 FROM loans l
                 JOIN has_loan hs ON hs.loanID = l.loanID
                 JOIN users u ON u.userID = hs.userID
-                JOIN books b ON b.ISBN = l.ISBN AND b.schoolID = u.schoolID
+                JOIN books b ON b.ISBN = l.ISBN 
                 WHERE u.schoolID = %s
                 """
         c11.execute(q11, (schoolID, ))
@@ -1687,6 +1695,12 @@ def delete_user(handlerID, user_id):
     db.commit()
     cur4.close()
     
+    cur4 = db.cursor()
+    for loanID in loanIDs:
+        cur4.execute("DELETE FROM loans WHERE loanID = %s", loanID)
+    db.commit()
+    cur4.close()
+    
     cur5 = db.cursor()
     cur5.execute("DELETE FROM review WHERE userID = %s", (user_id,))
     db.commit()
@@ -2325,7 +2339,7 @@ def query315():
         year = request.form['year']
         c = db.cursor()
         q = """
-        SELECT DISTINCT h1.firstname, h1.lastname, h2.firstname, h2.lastname, s1.name, s2.name 
+        SELECT DISTINCT h1.firstname, h1.lastname, h2.firstname, h2.lastname, s1.name, s2.name, counts.loan_count
 FROM handler h1
 JOIN schools s1 ON s1.schoolID = h1.schoolID
 JOIN (
