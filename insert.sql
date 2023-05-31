@@ -12,7 +12,7 @@ VALUES
   (default,"1ο Γενικό Λύκειο Κω","1o_gel_kos@schools.edu","2242055252","Δωδεκανήσου", 2,"14758","Κως");
   
   INSERT INTO `schools` (`schoolID`,`name`,`email`,`phone`,`str_name`,`str_number`,`zip_code`,`city`)
-VALUES  (default, "3o Gel Rodou","gel3_rodou@schools.edu","2241032222","Δωδεκανήσου",30,"12534","Ρόδος");
+VALUES  (default, "3ο ΓΕΛ ΡΟΔΟΥ","gel3_rodou@schools.edu","2241032222","Δωδεκανήσου",30,"12534","Ρόδος");
 
   
   
