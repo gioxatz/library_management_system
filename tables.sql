@@ -201,7 +201,6 @@ ALTER TABLE `has_reserv` ADD FOREIGN KEY (`userID`) REFERENCES `users`(`userID`)
 
 
 CREATE INDEX subs ON subjects (subject);
-CREATE INDEX keyws ON keywords (keyword);
 CREATE INDEX unames ON users (username);
 CREATE INDEX pasrs ON users (password);
 CREATE INDEX surs ON users (surname);
@@ -210,9 +209,8 @@ CREATE INDEX auths ON author (name);
 SET GLOBAL event_scheduler = ON;
 
 
---  Endpoint for first step 
 
-
+DELIMITER //
 CREATE TRIGGER `increase_num_reserv_trigger` AFTER INSERT ON `has_reserv`
  FOR EACH ROW BEGIN
     DECLARE user_type VARCHAR(10);
@@ -228,13 +226,8 @@ CREATE TRIGGER `increase_num_reserv_trigger` AFTER INSERT ON `has_reserv`
     ELSEIF user_type = 'teacher' THEN
         UPDATE teacher SET num_reserv = num_reserv + 1 WHERE userID = NEW.userID;
     END IF;
-END
+END//
 
-
--- Endpoint for second step
-
-
-DELIMITER //
 
 CREATE EVENT delete_expired_reservations_event
 ON SCHEDULE EVERY 1 DAY
@@ -244,13 +237,11 @@ BEGIN
     DECLARE user_type VARCHAR(10);
     DECLARE user_id INT;
     
-    -- Delete expired reservations from has_reserv table
     DELETE hr
     FROM has_reserv hr
     JOIN reservations r ON hr.resID = r.resID
     WHERE DATEDIFF(CURRENT_DATE, r.res_date) > 7;
     
-    -- Retrieve the user ID and user type for affected reservations
     SELECT r.userID, CASE
         WHEN EXISTS(SELECT * FROM student WHERE userID = r.userID) THEN 'student'
         WHEN EXISTS(SELECT * FROM teacher WHERE userID = r.userID) THEN 'teacher'
@@ -258,10 +249,8 @@ BEGIN
     FROM reservations r
     WHERE DATEDIFF(CURRENT_DATE, r.res_date) > 7;
     
-    -- Delete expired reservations from reservations table
     DELETE FROM reservations WHERE DATEDIFF(CURRENT_DATE, res_date) > 7;
     
-    -- Increment num_reserv by 1 for the respective user
     IF user_type = 'student' THEN
         UPDATE student SET num_reserv = num_reserv + 1 WHERE userID = user_id;
     ELSEIF user_type = 'teacher' THEN
