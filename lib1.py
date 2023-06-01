@@ -75,7 +75,7 @@ def admlogin():
     cur = db.cursor()
     cur.execute("SELECT * FROM admin WHERE username = %s AND password = %s", (username, password))
     admin = cur.fetchone()
-    print(admin)
+    # print(admin)
     cur.close()
     if admin is None:
         return render_template('admlogin.html', message='Invalid username or password')
@@ -163,7 +163,6 @@ def restore_database():
     with open('lib1_backup.sql', 'r', encoding='utf-8') as backup_file:
         sql_statements = backup_file.read()
 
-    # Split the SQL statements by semicolon and execute them one by one
     statements = sql_statements.split(';')
     for statement in statements:
         if statement.strip() != '':
@@ -174,19 +173,8 @@ def restore_database():
     db.commit()
     cursor.close()
 
-    return redirect(url_for('welcome', message='Επιτυχές restoration'))
+    return redirect(url_for('welcome', message='Επιτυχές restore'))
 
-    
-@app.route('/adminlogout')
-def admin_logout():
-    session.pop('admin_id', None)
-    session.pop('admin_name', None)
-    return redirect('/adminlogin')
-
-
-@app.route('/helloadmin')
-def hello_admin():
-    return render_template('hellopage.html')
 
 @app.route('/school/<int:school_id>')
 def school(school_id):
@@ -205,7 +193,7 @@ def school(school_id):
     """
     cursor.execute(query, (school_id,))
     school_data = cursor.fetchone()
-    print(school_data)
+    # print(school_data)
     cursor.execute("SELECT * FROM books WHERE schoolID = %s", (school_id,))
     books = cursor.fetchall()
     
@@ -390,7 +378,7 @@ def loans_by_school():
         
         c1.execute(q1, tuple(params))
         loans = c1.fetchall()
-        print(loans)
+        #print(loans)
         c1.close()
         
         return render_template('loans_admin.html', loans = loans, schools = schools, months=get_all_months(), years=get_years())
@@ -406,7 +394,7 @@ def loans_by_school():
                 """
         c11.execute(q11, )
         loans = c11.fetchall()
-        print(loans)
+        #print(loans)
         c11.close()
         
         
@@ -443,7 +431,7 @@ def loans_of_school(schoolID):
         
         c1.execute(q1, tuple(params))
         loans = c1.fetchall()
-        print(loans)
+        #print(loans)
         c1.close()
         
         return render_template('loans_handler.html', loans = loans, schoolID = schoolID, months=get_all_months(), years=get_years())
@@ -459,7 +447,7 @@ def loans_of_school(schoolID):
                 """
         c11.execute(q11, (schoolID, ))
         loans = c11.fetchall()
-        print(loans)
+        #print(loans)
         c11.close()
         
         
@@ -510,7 +498,7 @@ def books(userID, school_id):
         cursor.execute(query, tuple(params))
         books = cursor.fetchall()
         cursor.close()
-        print(books)
+        #print(books)
 
     else:
         cursor = db.cursor()
@@ -525,7 +513,7 @@ def books(userID, school_id):
         """, (school_id,))
         books = cursor.fetchall()
         cursor.close()
-        print(books)
+        #print(books)
     
     cu = db.cursor()
     query = """
@@ -554,14 +542,14 @@ def books(userID, school_id):
     cursor = db.cursor()
 
     current_date = date.today()
-    print(date.today())
+    #print(date.today())
     seven_days_ago = current_date - timedelta(days=7)
-    print(seven_days_ago)
+    #print(seven_days_ago)
     query = """
     SELECT loans.loan_date, loans.ISBN
     FROM loans
     JOIN has_loan ON loans.loanID = has_loan.loanID
-    WHERE has_loan.userID = %s AND current_date - loans.loan_date > 7 and loans.active = 1
+    WHERE has_loan.userID = %s AND datediff(current_date, loans.loan_date) > 7 and loans.active = 1
     """
     cursor.execute(query, (userID, ))
     loans = cursor.fetchall()
@@ -576,13 +564,13 @@ def books(userID, school_id):
     cursor.execute(query, (userID, ))
     loaned_ISBN = tuple(row[0] for row in cursor.fetchall())
     cursor.close()
-    print(loaned_ISBN)
+    #print(loaned_ISBN)
 
     if tea_in is None:
-        print("stu", stu_in[0], stu_in[1], userID)
+        #print("stu", stu_in[0], stu_in[1], userID)
         is_student = True
     else:
-        print("tea", tea_in[0], tea_in[1], userID)
+        #print("tea", tea_in[0], tea_in[1], userID)
         is_student = False
 
     return render_template('books.html', loaned_ISBN = loaned_ISBN, userID=userID, school_id=school_id, cn_ln=cn_ln, is_stu=is_student, nums=stu_in if is_student else tea_in, books=books, subjects=subjects, selected_subject_id=selected_subject_id, search_title=search_title, search_author=search_author, search_copies=search_copies)
@@ -632,7 +620,7 @@ def handl_books_loan(userID, school_id):
         cursor.execute(query, tuple(params))
         books = cursor.fetchall()
         cursor.close()
-        print(books)
+        #print(books)
 
     else:
         cursor = db.cursor()
@@ -647,7 +635,7 @@ def handl_books_loan(userID, school_id):
         """, (school_id,))
         books = cursor.fetchall()
         cursor.close()
-        print(books)
+        #print(books)
     
     cu = db.cursor()
     query = """
@@ -675,15 +663,11 @@ def handl_books_loan(userID, school_id):
     
     cursor = db.cursor()
 
-    current_date = date.today()
-    print(date.today())
-    seven_days_ago = current_date - timedelta(days=7)
-    print(seven_days_ago)
     query = """
     SELECT loans.loan_date, loans.ISBN
     FROM loans
     JOIN has_loan ON loans.loanID = has_loan.loanID
-    WHERE has_loan.userID = %s AND current_date - loans.loan_date > 7
+    WHERE loans.active = 1 AND has_loan.userID = %s AND datediff(current_date, loans.loan_date) > 7
     """
 
     cursor.execute(query, (userID, ))
@@ -738,7 +722,7 @@ def book(isbn, schoolid):
     cur = db.cursor()
     cur.execute(query2, (isbn, schoolid))
     keyword = cur.fetchall()
-    print(book)
+    #print(book)
     cur.close()
     db.commit()
     cu1 = db.cursor()
@@ -790,11 +774,11 @@ def modify_book(isbn, schoolid):
 
         subs, auths, keys = [], [], []
         alsub, alauth, alkey = [], [], []
-        print(request.form, schoolid)
+        #print(request.form, schoolid)
         authors = author.split(", ")
         new_sub = newsubject.split(", ")
         key = keywords.split(", ")
-        print(authors[0], new_sub[0], key[0])
+        #print(authors[0], new_sub[0], key[0])
 
         cu = db.cursor()
         query = """
@@ -827,7 +811,7 @@ def modify_book(isbn, schoolid):
         cu.close()
         for ns in new_sub:
             if(ns not in subs):
-                alsub.append(ns) #νεες κατηγορίες
+                alsub.append(ns)
         for au in authors:
             if(au not in auths):
                 alauth.append(au)
@@ -835,9 +819,9 @@ def modify_book(isbn, schoolid):
             if(ke not in keys):
                 alkey.append(ke)
                 
-        print(alauth)
-        print(alsub)
-        print(alkey)
+        # print(alauth)
+        # print(alsub)
+        # print(alkey)
             
         cursor = db.cursor()
         query = """ UPDATE books SET title = %s, publisher = %s, num_pages = %s, lang = %s, copies=%s, image = %s, summary = %s
@@ -845,6 +829,20 @@ def modify_book(isbn, schoolid):
         cursor.execute(query, (title, publisher, num_pages, lang, copies, image, summary, isbn, schoolid))
         cursor.close()
         db.commit()
+        
+        cursor = db.cursor()
+        query = """SELECT authorID FROM is_author WHERE ISBN = %s"""
+        cursor.execute(query, (isbn,))
+        existing_authors = set(row[0] for row in cursor.fetchall())
+
+        if alauth:
+            for au in existing_authors:
+                if au not in alauth:
+                    query = """DELETE FROM is_author WHERE ISBN = %s AND authorID = %s"""
+                    cursor.execute(query, (isbn, au))
+            db.commit()
+        cursor.close()
+
         
         if alauth:
             cursor = db.cursor()
@@ -956,11 +954,11 @@ def newbook(schoolID):
         
         subs, auths, keys = [], [], []
         alsub, alauth, alkey = [], [], []
-        print(request.form, schoolID)
+        # print(request.form, schoolID)
         authors = author.split(", ")
         new_sub = newsubject.split(", ")
         key = keywords.split(", ")
-        print(authors[0], new_sub[0], key[0])
+        # print(authors[0], new_sub[0], key[0])
         
         cu = db.cursor()
         query = """
@@ -993,7 +991,7 @@ def newbook(schoolID):
         cu.close()
         for ns in new_sub:
             if(ns not in subs):
-                alsub.append(ns) #νεες κατηγορίες
+                alsub.append(ns)
         for au in authors:
             if(au not in auths):
                 alauth.append(au)
@@ -1001,9 +999,9 @@ def newbook(schoolID):
             if(ke not in keys):
                 alkey.append(ke)
                 
-        print(alauth)
-        print(alsub)
-        print(alkey)
+        # print(alauth)
+        # print(alsub)
+        # print(alkey)
             
         cursor = db.cursor()
         query = """ INSERT INTO books (ISBN, schoolID, title, publisher, num_pages, lang, copies, image, summary)
@@ -1091,7 +1089,7 @@ def teachlogin(schoolID):
     cur.execute("""SELECT users.* FROM teacher
     join users on users.userID = teacher.userID WHERE username = %s AND password = %s AND active = 1""", (username, password))
     teacher = cur.fetchone()
-    print(teacher)
+    # print(teacher)
     cur.close()
     if teacher is None:
         return render_template('teacher_login.html', schoolID = schoolID, message='Invalid username or password')
@@ -1182,7 +1180,7 @@ def student_registration(schoolID):
         username = request.form['username']
         password = request.form['password']
         birthdate = request.form['birthdate']
-        print(request.form, schoolID)
+        # print(request.form, schoolID)
         cu1 = db.cursor()
         cu1.execute("SELECT email FROM users where email = %s", (email, ))
         tr1 = cu1.fetchone()
@@ -1225,7 +1223,7 @@ def teacher_registration(schoolID):
         username = request.form['username']
         password = request.form['password']
         birthdate = request.form['birthdate']
-        print(request.form, schoolID)
+        # print(request.form, schoolID)
         cu1 = db.cursor()
         cu1.execute("SELECT email FROM users where email = %s", (email, ))
         tr1 = cu1.fetchone()
@@ -1270,7 +1268,7 @@ def handler_registration(schoolID):
         email = request.form['email']
         username = request.form['username']
         password = request.form['password']
-        print(request.form, schoolID)
+        # print(request.form, schoolID)
         cu1 = db.cursor()
         cu1.execute("SELECT email FROM handler where email = %s", (email, ))
         tr1 = cu1.fetchone()
@@ -1305,7 +1303,7 @@ def showreserv_stud(schoolID, userID):
         """
     cur.execute(query, (userID, ))
     stu_res = cur.fetchall()
-    print(stu_res)
+    # print(stu_res)
     return render_template('stud_reservations.html', schoolID = schoolID, userID = userID, stu_res = stu_res)
            
 
@@ -1320,32 +1318,38 @@ def showreserv_teach(schoolID, userID):
         """
     cur.execute(query, (userID, ))
     tea_res = cur.fetchall()
-    print(tea_res)
+    # print(tea_res)
     return render_template('tea_reservations.html', schoolID = schoolID, userID = userID, tea_res = tea_res)
            
 
 @app.route('/school/<int:schoolID>/student/<int:userID>/newreservation/<int:ISBN>')
 def stud_res(schoolID, userID, ISBN):
-    cur1 = db.cursor()
-    query1 = """
-        INSERT INTO reservations values (default, %s, default, default)
-        """
-    cur1.execute(query1, (ISBN,))
-    db.commit()
-    q2 = "SELECT resID from reservations ORDER BY resID DESC LIMIT 1"
-    cur1.execute(q2)
-    resID = cur1.fetchone()[0]
-    cur1.close()
-    
-    
-    cur2 = db.cursor()
-    query2 = """
-    INSERT INTO has_reserv (resID, userID) VALUES (%s, %s)
-        """
-    cur2.execute(query2, (resID, userID))
-    db.commit()
-    cur2.close()
-    return redirect(url_for('welcome',  message='Επιτυχής Καταχώρηση'))
+    try:
+        cur1 = db.cursor()
+        query1 = "INSERT INTO reservations VALUES (DEFAULT, %s, DEFAULT, DEFAULT)"
+        cur1.execute(query1, (ISBN,))
+        db.commit()
+        
+        q2 = "SELECT resID FROM reservations ORDER BY resID DESC LIMIT 1"
+        cur1.execute(q2)
+        resID = cur1.fetchone()[0]
+        cur1.close()
+        
+        cur2 = db.cursor()
+        query2 = "INSERT INTO has_reserv (resID, userID) VALUES (%s, %s)"
+        cur2.execute(query2, (resID, userID))
+        db.commit()
+        cur2.close()
+        
+        return redirect(url_for('welcome', message='Επιτυχής Καταχώρηση'))
+    except mysql.connector.Error as err:
+        if err.errno == 1644:
+            error_message = "Duplicate reservation not allowed for the same book and user. The previous reservation has been deleted."
+        else:
+            error_message = "An error occurred during the reservation process."
+        
+        return redirect(url_for('welcome', message=error_message))
+
 
 
 @app.route('/school/<int:schoolID>/teacher/<int:userID>/newreservation/<int:ISBN>')
@@ -1356,7 +1360,6 @@ def teach_res(schoolID, userID, ISBN):
         """
     cur1.execute(query1, (ISBN,))
     db.commit()
-    # resID = cur1.lastrowid
     q2 = "SELECT resID from reservations ORDER BY resID DESC LIMIT 1"
     cur1.execute(q2)
     resID = cur1.fetchone()[0]
@@ -1378,7 +1381,7 @@ def delete_res(schoolID, userID, resID):
     teacher = cur1.fetchone()
     db.commit()
     cur1.close()
-    print(teacher)
+    # print(teacher)
     
     cur2 = db.cursor()
     cur2.execute("DELETE FROM has_reserv WHERE resID = %s", (resID,))
@@ -1418,7 +1421,7 @@ def showloans_stud(schoolID, userID):
         """
     cur.execute(query, (userID, ))
     stu_ln = cur.fetchall()
-    print(stu_ln)
+    # print(stu_ln)
     return render_template('stud_loans.html', schoolID = schoolID, userID = userID, stu_ln = stu_ln)
            
 
@@ -1433,7 +1436,7 @@ def showloans_teach(schoolID, userID):
         """
     cur.execute(query, (userID, ))
     tea_ln = cur.fetchall()
-    print(tea_ln)
+    # print(tea_ln)
     return render_template('tea_loans.html', schoolID = schoolID, userID = userID, tea_ln = tea_ln)
            
 
@@ -1449,6 +1452,7 @@ def loan_plus_7(loanID):
     c1.close()
     return redirect(url_for('welcome',  message='Επιτυχής Καταχώρηση'))
 
+
 @app.route('/success')
 def success():
     return render_template('success.html')
@@ -1463,7 +1467,6 @@ def s_newloan(schoolID, userID, ISBN):
         """
     cur1.execute(q1, (ISBN, ))
     db.commit()
-    # loanID = cur1.lastrowid
     q2 = "SELECT loanID from loans ORDER BY loanID DESC LIMIT 1"
     cur1.execute(q2)
     loanID = cur1.fetchone()[0]
@@ -1496,7 +1499,6 @@ def t_newloan(schoolID, userID, ISBN):
         """
     cur1.execute(q1, (ISBN, ))
     db.commit()
-    # loanID = cur1.lastrowid
     q2 = "SELECT loanID from loans ORDER BY loanID DESC LIMIT 1"
     cur1.execute(q2)
     loanID = cur1.fetchone()[0]
@@ -1540,7 +1542,7 @@ def studlogin(schoolID):
     cur.execute("""SELECT users.* FROM student
     join users on users.userID = student.userID WHERE username = %s AND password = %s and active = 1""", (username, password))
     student = cur.fetchone()
-    print(student)
+    # print(student)
     cur.close()
     if student is None:
         return render_template('student_login.html', schoolID = schoolID, message='Invalid username or password')
@@ -1588,6 +1590,7 @@ def deactivate_handler(handlerID):
     cursor.close()
     return redirect(url_for('welcome',  message='Επιτυχής Καταχώρηση'))
 
+
 @app.route('/school/<int:handlerID>/delete', methods=['POST'])
 def delete_handler(handlerID):
     cursor = db.cursor()
@@ -1595,6 +1598,7 @@ def delete_handler(handlerID):
     db.commit()
     cursor.close()
     return redirect(url_for('welcome',  message='Επιτυχής Καταχώρηση'))
+
 
 @app.route('/school/<int:schoolID>/handlerlogin')
 def handlerlogin(schoolID):
@@ -1609,7 +1613,7 @@ def handllogin():
     cur.execute("""SELECT handler.* FROM handler
     WHERE username = %s AND password = %s AND active = 1""", (username, password))
     handler = cur.fetchone()
-    print(handler)
+    # print(handler)
     cur.close()
     if handler is None:
         return render_template('handler_login.html', message='Invalid username or password')
@@ -1621,13 +1625,14 @@ def handllogin():
 def user_card(user_id):
     c = db.cursor()
     q = """
-    SELECT u.name, u.surname, u.email, u.birthdate, s.name, current_date
+    SELECT u.name, u.surname, u.email, u.birthdate, s.name, current_date, u.userID
     FROM users u join schools s on s.schoolID = u.schoolID
     WHERE u.userID = %s
     """
     c.execute(q, (user_id, ))
     user = c.fetchone()
-    print(user)
+    # print(user)
+
     return render_template('user_card.html', user = user)
     
     
@@ -1656,7 +1661,7 @@ def delete_user(handlerID, user_id):
     teacher = cur1.fetchone()
     db.commit()
     cur1.close()
-    print(teacher)
+    # print(teacher)
     
     cur2 = db.cursor()
     cur2.execute("SELECT resID FROM has_reserv WHERE userID = %s", (user_id,))
@@ -1708,7 +1713,7 @@ def delete_user(handlerID, user_id):
     
     for book in books:
         cur5 = db.cursor()
-        cur5.execute("UPDATE books SET available_copies = available_copies + 1 WHERE ISBN = %s", (book,))
+        cur5.execute("UPDATE books SET available_copies = available_copies + 1 WHERE ISBN = %s", (book[0],))
         db.commit()
         cur5.close()
 
@@ -1803,7 +1808,7 @@ def all_students(handlerID, schoolID):
     q1 = """SELECT u.*, t.* FROM users u join student t on u.userID = t.userID where u.schoolID = %s"""
     cu1.execute(q1, (schoolID, ))
     stu_users = cu1.fetchall()
-    print(stu_users)
+    # print(stu_users)
     cu1.close()
     if request.method == 'POST':
                 
@@ -1825,6 +1830,8 @@ def h_s_loans(handlerID, userID):
         FROM loans AS r
         JOIN has_loan AS hs ON r.loanID = hs.loanID and hs.userID = %s
         JOIN books AS b ON b.ISBN = r.ISBN
+        JOIN users u on u.userID = hs.userID
+        where u.schoolID = b.schoolID 
         """
 
     cur.execute(query, (userID, ))
@@ -1840,10 +1847,13 @@ def h_t_loans(handlerID, userID):
         FROM loans AS r
         JOIN has_loan AS hs ON r.loanID = hs.loanID and hs.userID = %s
         JOIN books AS b ON b.ISBN = r.ISBN
+        JOIN users u on u.userID = hs.userID
+        where u.schoolID = b.schoolID 
         """
 
     cur.execute(query, (userID, ))
     tea_ln = cur.fetchall()
+    print(tea_ln)
     cur.close()
     return render_template('h_t_loans.html', tea_ln = tea_ln, userID = userID)
 
@@ -1864,18 +1874,15 @@ def h_s_res(handlerID, userID):
     cur.close()
     
     cursor = db.cursor()
-    current_date = date.today()
-    print(date.today())
-    seven_days_ago = current_date - timedelta(days=7)
-    print(seven_days_ago)
+    
     query = """
     SELECT loans.loan_date, loans.ISBN
     FROM loans
     JOIN has_loan ON loans.loanID = has_loan.loanID
-    WHERE has_loan.userID = %s AND loans.loan_date < %s
+    WHERE has_loan.userID = %s AND datediff(current_date, loans.loan_date) > 7 
     and loans.active = 1
     """
-    cursor.execute(query, (userID, seven_days_ago))
+    cursor.execute(query, (userID, ))
     loans = cursor.fetchall()
     cn_ln = len(loans) == 0 
     cursor.close()
@@ -1899,10 +1906,7 @@ def h_t_res(handlerID, userID):
     cur.close()
     
     cursor = db.cursor()
-    current_date = date.today()
-    print(date.today())
-    seven_days_ago = current_date - timedelta(days=7)
-    print(seven_days_ago)
+
     query = """
     SELECT loans.loan_date, loans.ISBN
     FROM loans
@@ -1920,6 +1924,20 @@ def h_t_res(handlerID, userID):
     
 @app.route('/student/accept_loan/<int:userID>/<int:resID>/<int:ISBN>')
 def acc_st_loan(userID, resID, ISBN):
+    
+    cur1 = db.cursor()
+    q1 = """ 
+    SELECT b.available_copies from books b join users u on u.schoolID = b.schoolID 
+    where u.userID = %s
+    and b.ISBN = %s
+    """
+    cur1.execute(q1, (userID, ISBN))
+    cops = cur1.fetchone()[0]
+    cur1.close()
+    print(cops)
+    if(cops < 1) :
+        return  redirect(url_for('welcome',  message='Δεν μπορεί να γίνει δανεισμός καθώς δεν υπάρχουν διαθέσιμα αντίτυπα του βιβλίου'))
+    
     cur1 = db.cursor()
     q1 = """ 
     INSERT INTO loans values (default, %s, default, default, 1, 0)
@@ -2188,7 +2206,7 @@ def query314():
         c1.execute(q)
         auths = c1.fetchall()
         c1.close()
-        print(auths)
+        # print(auths)
         return render_template('query314.html', auths = auths)
     
     
@@ -2222,7 +2240,7 @@ def query323(schoolID):
         cursor.execute(query, tuple(params))
         revs = cursor.fetchall()
         cursor.close()
-        print(revs)
+        # print(revs)
 
     else:
         c1 = db.cursor()
@@ -2403,7 +2421,7 @@ def all_loans(school_id):
         """, (school_id,))
         res = cursor.fetchall()
         cursor.close()
-        print(res)
+        #print(res)
     
         return render_template('all_loans.html', school_id=school_id, res = res)
 
@@ -2419,7 +2437,7 @@ def all_res(school_id):
         """, (school_id,))
         res = cursor.fetchall()
         cursor.close()
-        print(res)
+        #print(res)
     
         return render_template('all_res.html', school_id=school_id, res = res)
 
@@ -2463,7 +2481,7 @@ def delayed_loans(school_id):
         cursor.execute(query, tuple(params))
         res = cursor.fetchall()
         cursor.close()
-        print(res)
+        #print(res)
 
     else:
         cursor = db.cursor()
@@ -2476,7 +2494,7 @@ def delayed_loans(school_id):
         """, (school_id,))
         res = cursor.fetchall()
         cursor.close()
-        print(res)
+        #print(res)
     
     return render_template('delayed_loans.html', school_id=school_id, res = res, search_name=search_name, search_surname=search_surname, search_date=search_date)
 
@@ -2497,7 +2515,7 @@ def new_school():
         d_username = request.form['d_username']
         d_password = request.form['d_password']
         d_date = request.form['d_date']
-        print(request.form)
+        #print(request.form)
         
         cursor = db.cursor()
         query = """ INSERT INTO schools (schoolID, name, email, phone, str_name, str_number, zip_code, city)
@@ -2544,29 +2562,6 @@ def new_school():
 
 
 
-@app.route('/<int:schoolID>/<int:userID>/book_by_title', methods=['GET', 'POST'])
-def book_by_title(schoolID, userID):
-    if request.method == 'POST':
-        title = request.form['title']
-        c = db.cursor()
-        query = """
-            SELECT b.ISBN, b.schoolID, b.title, b.available_copies
-            FROM books b
-            WHERE b.schoolID = %s AND b.title LIKE %s;
-        """
-        c.execute(query, (schoolID, f"%{title}%"))
-        books = c.fetchall()
-        c.close()
-        return redirect(f"/search_results?title={title}")
-    return render_template('book_search.html')
-
-
-@app.route('/search_results')
-def search_results():
-    title = request.args.get('title')
-    return render_template('search_results.html', title=title)
-
-
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host = "localhost", port = 5000)
