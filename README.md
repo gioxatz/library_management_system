@@ -9,13 +9,22 @@
 
 Οι οδηγίες εγκατάστασης παρουσιάζονται στον φάκελο docs στο αρχείο installation_guide.pdf
 
+## User Manual
+
+Οι οδηγίες χρήσης της εφαρμογής βρίσκονται στον φάκελο docs στο αρχείο user_manual.pdf
+
+## DDL και DML
+
+Το DDL της βάσης βρίσκεται στο αρχείο tables.sql
+
+Το DML της βάσης βρίσκεται στο αρχείο insert.sql
+
 ## requirements
 
 XAMPP\
 Python\
 flask\
 mysql.connector 
-
 
 
 
