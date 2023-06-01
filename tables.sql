@@ -3,6 +3,9 @@ DROP DATABASE IF EXISTS lib1;
 create database lib1;
 use lib1;
 
+-- Schools, primary key: schoolID
+
+
 CREATE TABLE `lib1`.`schools` (
 `schoolID` INT NOT NULL AUTO_INCREMENT , 
 `name` VARCHAR(30) NOT NULL UNIQUE, 
@@ -13,6 +16,10 @@ CREATE TABLE `lib1`.`schools` (
 `zip_code` INT NOT NULL , 
 `city` VARCHAR(20) NOT NULL , 
 PRIMARY KEY (`schoolID`)) ENGINE = InnoDB;
+
+-- books
+-- primary key: ISBN
+-- foreign key: schoolID
 
 CREATE TABLE `lib1`.`books` (
 `ISBN` BIGINT NOT NULL , 
@@ -29,6 +36,11 @@ PRIMARY KEY (`ISBN`, `schoolID`)) ENGINE = InnoDB;
 
 ALTER TABLE `books` ADD FOREIGN KEY (`schoolID`) REFERENCES `schools`(`schoolID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
+
+-- Author, because there can be more than one authors for a book
+-- primary key: authorID
+
+
 CREATE TABLE `lib1`.`author` (
 `authorID` INT NOT NULL AUTO_INCREMENT , 
 `name` VARCHAR(30) NOT NULL , 
@@ -41,6 +53,10 @@ PRIMARY KEY (`ISBN`, `authorID`)) ENGINE = InnoDB;
 
 ALTER TABLE `is_author` ADD FOREIGN KEY (`authorID`) REFERENCES `author`(`authorID`) ON DELETE RESTRICT ON UPDATE RESTRICT; 
 ALTER TABLE `is_author` ADD FOREIGN KEY (`ISBN`) REFERENCES `books`(`ISBN`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- subjects, there can be multiple subjects for a book
+-- primary key:subID
 
 CREATE TABLE `lib1`.`subjects` (
 `subID` INT NOT NULL AUTO_INCREMENT , 
@@ -56,6 +72,9 @@ ALTER TABLE `has_subject` ADD FOREIGN KEY (`ISBN`) REFERENCES `books`(`ISBN`) ON
 ALTER TABLE `has_subject` ADD FOREIGN KEY (`subID`) REFERENCES `subjects`(`subID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
+-- keywords, there can be multiple keywords for a book
+-- primary key:keyword_ID
+
 CREATE TABLE `lib1`.`keywords` (
 `keyword_ID` INT NOT NULL AUTO_INCREMENT , 
 `keyword` VARCHAR(30) NOT NULL , 
@@ -68,6 +87,11 @@ CREATE TABLE has_keywords (
     FOREIGN KEY (ISBN) REFERENCES books(ISBN),
     FOREIGN KEY (keyword_id) REFERENCES keywords(keyword_id)
 );
+
+
+-- users
+-- primary key: userID
+-- foreign key: schoolID
 
 CREATE TABLE `lib1`.`users` (
 `userID` INT NOT NULL AUTO_INCREMENT , 
@@ -84,6 +108,12 @@ ALTER TABLE `users` ADD `birthdate` DATE NOT NULL DEFAULT '2000-01-01' AFTER `ac
 ALTER TABLE `users` ADD FOREIGN KEY (`schoolID`) REFERENCES `schools`(`schoolID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `users` ADD UNIQUE(`email`);
 
+
+-- school director
+-- is a user -> foreign keys schoolID, userID
+-- primary key : directorID
+
+
 CREATE TABLE `lib1`.`school_director` (
 `directorID` INT NOT NULL AUTO_INCREMENT , 
 `schoolID` INT NOT NULL , 
@@ -95,6 +125,11 @@ PRIMARY KEY (`directorID`)) ENGINE = InnoDB;
 ALTER TABLE `school_director` ADD FOREIGN KEY (`schoolID`) REFERENCES `schools`(`schoolID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `school_director` ADD FOREIGN KEY (`userID`) REFERENCES `users`(`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
+
+-- admin
+-- primary key : adminID
+
+
 CREATE TABLE `lib1`.`admin` (`adminID` INT NOT NULL AUTO_INCREMENT , 
 `name` VARCHAR(30) NOT NULL , 
 `surname` VARCHAR(20) NOT NULL,
@@ -104,6 +139,11 @@ CREATE TABLE `lib1`.`admin` (`adminID` INT NOT NULL AUTO_INCREMENT ,
 PRIMARY KEY (`adminID`)) ENGINE = InnoDB;
 
 ALTER TABLE `admin` ADD UNIQUE(`email`);
+
+
+-- handler
+-- primary key : handlerID
+-- responsible for a school -> foreign key: schoolID
 
 CREATE TABLE `lib1`.`handler` (
 `handlerID` INT NOT NULL AUTO_INCREMENT , 
@@ -121,6 +161,10 @@ ALTER TABLE `handler` ADD `active` BOOLEAN NOT NULL DEFAULT FALSE AFTER `email`;
 ALTER TABLE `handler` ADD FOREIGN KEY (`schoolID`) REFERENCES `schools`(`schoolID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
+-- loans 
+-- primary key: loanID
+
+
 CREATE TABLE `lib1`.`loans` (
 `loanID` INT NOT NULL AUTO_INCREMENT , 
 `ISBN` BIGINT NOT NULL , 
@@ -132,6 +176,9 @@ ALTER TABLE `loans` ADD `active` BOOLEAN NOT NULL DEFAULT TRUE AFTER `end_date`;
 ALTER TABLE `loans` ADD `pending` BOOLEAN NOT NULL DEFAULT TRUE AFTER `active`;
 ALTER TABLE `loans` ADD FOREIGN KEY (`ISBN`) REFERENCES `books`(`ISBN`) ON DELETE RESTRICT ON UPDATE RESTRICT; 
 
+-- reservations
+-- primary key: resID
+
 CREATE TABLE `lib1`.`reservations` (
 `resID` INT NOT NULL AUTO_INCREMENT , 
 `ISBN` BIGINT NOT NULL , 
@@ -140,6 +187,11 @@ CREATE TABLE `lib1`.`reservations` (
 PRIMARY KEY (`resID`)) ENGINE = InnoDB;
 
 ALTER TABLE `reservations` ADD FOREIGN KEY (`ISBN`) REFERENCES `books`(`ISBN`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- review
+-- primary key: review_ID
+
 
 CREATE TABLE `lib1`.`review` (
 `review_ID` INT NOT NULL AUTO_INCREMENT , 
@@ -152,6 +204,11 @@ PRIMARY KEY (`review_ID`)) ENGINE = InnoDB;
 
 ALTER TABLE `review` ADD FOREIGN KEY (`ISBN`) REFERENCES `books`(`ISBN`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `review` ADD FOREIGN KEY (`userID`) REFERENCES `users`(`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- student is a user
+-- primary key and foreign key: userID
+-- num_loans refers to active loans
 
 CREATE TABLE `lib1`.`student` (
 `userID` INT NOT NULL ,
@@ -168,6 +225,11 @@ ALTER TABLE `student`
 ADD CONSTRAINT `chk_num_res` CHECK (`num_reserv` < 3);
 
 
+-- teacher is a user
+-- primary key and foreign key: userID
+-- num_loans refers to active loans
+
+
 CREATE TABLE `lib1`.`teacher` (
 `userID` INT NOT NULL , 
 `num_loans` INT NOT NULL DEFAULT '0',
@@ -178,9 +240,11 @@ CREATE TABLE `lib1`.`teacher` (
  
  ALTER TABLE `teacher` ADD FOREIGN KEY (`userID`) REFERENCES `users`(`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
  ALTER TABLE `teacher`
-ADD CONSTRAINT `check_num_loans` CHECK (`num_loans` < 3);
+ADD CONSTRAINT `check_num_loans` CHECK (`num_loans` < 2);
 ALTER TABLE `teacher`
-ADD CONSTRAINT `chk_num_res` CHECK (`num_reserv` < 3);
+ADD CONSTRAINT `chk_num_res` CHECK (`num_reserv` < 2);
+
+-- has_loan
 
 CREATE TABLE `lib1`.`has_loan` (
 `loanID` INT NOT NULL , 
@@ -189,6 +253,9 @@ PRIMARY KEY (`loanID`, `userID`)) ENGINE = InnoDB;
 
 ALTER TABLE `has_loan` ADD FOREIGN KEY (`loanID`) REFERENCES `loans`(`loanID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `has_loan` ADD FOREIGN KEY (`userID`) REFERENCES `users`(`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+-- has_reserv
+
 
 CREATE TABLE `lib1`.`has_reserv` (
 `resID` INT NOT NULL , 
@@ -199,16 +266,17 @@ ALTER TABLE `has_reserv` ADD FOREIGN KEY (`resID`) REFERENCES `reservations`(`re
 ALTER TABLE `has_reserv` ADD FOREIGN KEY (`userID`) REFERENCES `users`(`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
+-- INDEXES
+
 
 CREATE INDEX subs ON subjects (subject);
 CREATE INDEX unames ON users (username);
-CREATE INDEX pasrs ON users (password);
 CREATE INDEX surs ON users (surname);
 CREATE INDEX auths ON author (name);
 
 SET GLOBAL event_scheduler = ON;
 
-
+-- trigger to increase num_reserv in student or teacher after reservation
 
 DELIMITER //
 CREATE TRIGGER `increase_num_reserv_trigger` AFTER INSERT ON `has_reserv`
@@ -227,6 +295,9 @@ CREATE TRIGGER `increase_num_reserv_trigger` AFTER INSERT ON `has_reserv`
         UPDATE teacher SET num_reserv = num_reserv + 1 WHERE userID = NEW.userID;
     END IF;
 END//
+
+
+-- event to delete reservations after 7 days
 
 
 CREATE EVENT delete_expired_reservations_event
@@ -258,5 +329,54 @@ BEGIN
     END IF;
 END //
 
+
+-- stored procedure to insert reservation on a user, checking if he already reserves the same book
+
+
+CREATE PROCEDURE `insert_has_reserv`(IN p_resID INT, IN p_userID INT)
+BEGIN
+    DECLARE existing_reservations INT;
+
+    SELECT COUNT(*) INTO existing_reservations
+    FROM reservations r
+    JOIN has_reserv hs ON r.resID = hs.resID
+    WHERE hs.userID = p_userID
+      AND r.ISBN = (
+        SELECT ISBN FROM reservations WHERE resID = p_resID
+      );
+
+    IF existing_reservations > 0 THEN
+        DELETE FROM reservations WHERE resID = p_resID;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Duplicate reservation not allowed for the same book and user. The previous reservation has been deleted.';
+    END IF;
+END //
+
+
+-- stored procedure to insert loans on a user, checking if he has delayed loans
+
+
+CREATE PROCEDURE `insert_has_loan`(IN p_loanID INT, IN p_userID INT)
+BEGIN
+    DECLARE existing_loans INT;
+
+    SELECT COUNT(*) INTO existing_loans
+    FROM loans l
+    JOIN has_loan hl ON hl.loanID = l.loanID
+    WHERE hl.userID = p_userID AND l.active = 1 AND DATEDIFF(CURRENT_DATE, l.loan_date) > 7;
+
+    IF existing_loans > 0 THEN
+        CALL delete_loan(p_loanID);
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Delayed loan detected. The loan has been deleted.';
+    ELSE
+        INSERT INTO has_loan (loanID, userID) VALUES (p_loanID, p_userID);
+    END IF;
+END //
+
+CREATE PROCEDURE `delete_loan`(IN p_loanID INT)
+BEGIN
+    DELETE FROM loans WHERE loanID = p_loanID;
+END //
+
 DELIMITER ;
+
 
