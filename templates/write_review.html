@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Αξιολόγηση</title>
+  <style>
+    body {
+      background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 50px;
+      color: #ECF0F1;
+    }
+    table {
+      margin: 50px auto;
+      border-collapse: collapse;
+      background-color: #FFF;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 16px;
+      color: #222;
+      border-radius: 5px;
+      overflow: hidden;
+      width: 50%;
+    }
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #5F9EA0;
+      color: #FFF;
+      font-weight: bold;
+    }
+    input[type=text], input[type=password], input[type=email], input[type=username], input[type=submit] {
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border-radius: 4px;
+      width: 100%;
+      border: none;
+      border-bottom: 2px solid #ddd;
+      font-size: 16px;
+      color: #555;
+    }
+    textarea {
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border-radius: 4px;
+      width: 100%;
+      border: none;
+      border-bottom: 2px solid #ddd;
+      font-size: 16px;
+      color: #555;
+      resize: vertical;
+    }
+    button[type=submit] {
+      background-color: #5F9EA0;
+      color: #FFF;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button[type=submit]:hover {
+      background-color: #3F7F7F;
+    }
+  </style>
+</head>
+<body>
+  <h1>Αξιολόγηση βιβλίου</h1>
+  <table>
+    <form method="post" action="{{ url_for('write_review', userID=userID, isbn=isbn) }}">
+      <tr>
+        <th>Βαθμολόγήστε το βιβλίο από το 1 μέχρι το 5:</th>
+        <td>
+          <label><input type="radio" name="rating" value="1" required> 1</label>
+          <label><input type="radio" name="rating" value="2" required> 2</label>
+          <label><input type="radio" name="rating" value="3" required> 3</label>
+          <label><input type="radio" name="rating" value="4" required> 4</label>
+          <label><input type="radio" name="rating" value="5" required> 5</label>
+        </td>
+      </tr>
+      <tr>
+        <td>Η κλίμακα ορίζεται ως εξής: 5: Excellent | 4: Good | 3: Fair | 2: Poor | 1: Very Poor</td>
+      </tr>
+      <tr>
+        <th>Γράψτε την κριτική σας εδώ:</th>
+        <td colspan="2"><textarea id="comments" name="comments" rows="8" cols="40" required></textarea></td>
+      </tr>
+      <tr>
+        <td colspan="3"><input type="submit" value="Υποβολή"></td>
+      </tr>
+    </form>
+  </table>
+</body>
+</html>

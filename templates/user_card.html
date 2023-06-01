@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Κάρτα Δανειζόμενου</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/qrcode.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+
+  <style>
+    .card {
+      width: 400px;
+      border: 2px solid #ccc;
+      padding: 30px;
+      margin: 30px auto;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-family: Arial, sans-serif;
+    }
+
+    .card-header {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .card-body {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .card-body p {
+      margin: 0;
+      padding-bottom: 10px;
+    }
+
+    .print-button {
+    display: block;
+    margin: 0 auto;
+    color: #049550
+    border: 2px solid #ccc;
+    }
+
+    @media print {
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #fff;
+      }
+
+      .print-card {
+        width: 300px;
+        border: 1px solid #ccc;
+        padding: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+      }
+
+      .print-card-header {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .print-card-body {
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .print-card-body p {
+        margin: 0;
+        padding-bottom: 10px;
+      }
+
+      .print-button {
+        display: none !important;
+      }
+    }
+  </style>
+
+  <script>
+    function printCard() {
+      var printContent = document.getElementById("card-section").innerHTML;
+      var printWindow = window.open('', '_blank');
+      printWindow.document.open();
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>User Card</title>
+            <style>
+              ${window.document.querySelector('style').innerHTML}
+            </style>
+          </head>
+          <body>
+            <div class="print-card">
+              ${printContent}
+            </div>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.print();
+    }
+  </script>
+</head>
+
+<body>
+  <div class="card">
+    <div class="card-header">Κάρτα δανειζόμενου</div>
+    <div class="card-body" id="card-section">
+      <p><strong>Όνομα:</strong> {{ user[0] }}</p>
+      <p><strong>Επίθετο:</strong> {{ user[1] }}</p>
+      <p><strong>Ημερομηνία Γέννησης:</strong> {{ user[3] }}</p>
+      <p><strong>Email:</strong> {{ user[2] }}</p>
+      <p><strong>Σχολείο:</strong> {{ user[4] }}</p>
+      <p><strong>Ημερομηνία εγγραφής:</strong> {{ user[5] }}</p>
+      <div class="container-fluid">
+            <div class="text-center">
+                <img id="qr-code-img" class="qr-code img-thumbnail img-responsive" />
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="print-button">
+    <button onclick="printCard()">Εκτύπωση κάρτας</button>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+  <script>
+      function htmlEncode(value) {
+          return $('<div/>').text(value).html();
+      }
+
+      $(function () {
+          let qrCodeValue = htmlEncode('{{ user[6] }}');
+          let qrCodeUrl = 'https://chart.googleapis.com/chart?cht=qr&chl=' + qrCodeValue + '&chs=160x160&chld=L|0';
+
+          $('#qr-code-img').attr('src', qrCodeUrl);
+      });
+  </script>
+</body>
+</html>

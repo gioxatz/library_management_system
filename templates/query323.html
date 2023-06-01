@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+	<title>Μέσος όρος αξιολογήσεων</title>
+</head>
+<style>
+  body {
+    background-image: url("https://wallpapercave.com/wp/wp4312249.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #ccc;
+  }
+  h1, h2, h3 {
+    text-align: center;
+    margin-top: 50px;
+  }
+  table {
+    margin: 0 auto;
+    border: 2px solid #ccc;
+  }
+  th, td, tr {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  </style>
+<body>
+  <form method="post" action="{{ url_for('query323', schoolID=schoolID) }}" class="search-form">
+    <div class="form-group">
+      <label for="subject_id">Subject:</label>
+      <select id="subject_id" name="subject_id">
+        <option value="all" {% if selected_subject_id == 'all' %}selected{% endif %}>All</option>
+        {% for subject in subjects %}
+          <option value="{{ subject[0] }}" {% if selected_subject_id == subject[0] %}selected{% endif %}>{{ subject[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="search_surname">Επώνυμο μαθητή:</label>
+      <input type="text" id="search_surname" name="search_surname" class="search-input" value="{{ search_surname }}">
+    </div>
+    <button type="submit" class="search-button">Search</button>
+  </form>
+  <h1>  Ο μέσος όρος των αξιολογήσεων ανά χρήστη είναι:</h1>
+  {% if revs %}
+  <table>
+    <thead>
+      <tr>
+        <th>Χρήστης</th>
+        <th>Μέσος όρος αξιολογήσεων</th>
+      </tr>
+    </thead>
+    <tbody>
+  {% for rev in revs %}
+  <tr>
+    <td>{{ rev[0] }} {{rev[1]}}</td>
+    <td>{{ rev[2] }} / 5.0000</td>
+  </tr>
+  {% endfor %}
+</tbody>
+  </table>
+  {% else %}
+<h2>Δεν υπάρχουν καταχωρήσεις για τα κριτήρια που επιλέξατε</h2>
+{% endif %}
+<h3>Πατήστε <a href="/">εδώ</a> για να επιστρέψετε στην αρχική σελίδα.</h3>
+
+</body>
+</html>
