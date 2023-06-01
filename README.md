@@ -7,7 +7,7 @@
 
 ## Installation
 
-Οι οδηγίες εγκατάστασης παρουσιάζονται στον φάκελο docs
+Οι οδηγίες εγκατάστασης παρουσιάζονται στον φάκελο docs στο αρχείο installation_guide.pdf
 
 ## requirements
 
