@@ -59,6 +59,11 @@
     button[type=submit]:hover {
       background-color: #3F7F7F;
     }
+    .readonly-text {
+    color: #999;
+    font-size: 12px;
+    margin-top: 5px;
+  }
   </style>
 </head>
 <body>
@@ -67,7 +72,11 @@
     <form method="post" action="{{ url_for('modify_book', isbn=isbn, schoolid=schoolid) }}">
       <tr>
         <th>ISBN:</th>
-        <td><input type="text" id="isbn" name="isbn" required value="{{ book[0] }}"></td>
+        <td><div class="input-container">
+        <input type="text" id="isbn" name="isbn" required value="{{ book[0] }}" readonly>
+        <span class="readonly-text">This field cannot be changed</span>
+      </div>
+    </td>
       </tr>
       <tr>
       <tr>
