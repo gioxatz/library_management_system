@@ -273,6 +273,7 @@ CREATE INDEX subs ON subjects (subject);
 CREATE INDEX unames ON users (username);
 CREATE INDEX surs ON users (surname);
 CREATE INDEX auths ON author (name);
+CREATE INDEX ldate ON loans (loan_date);
 
 SET GLOBAL event_scheduler = ON;
 
@@ -294,39 +295,53 @@ CREATE TRIGGER `increase_num_reserv_trigger` AFTER INSERT ON `has_reserv`
     ELSEIF user_type = 'teacher' THEN
         UPDATE teacher SET num_reserv = num_reserv + 1 WHERE userID = NEW.userID;
     END IF;
-END//
+END //
 
 
 -- event to delete reservations after 7 days
-
 
 CREATE EVENT delete_expired_reservations_event
 ON SCHEDULE EVERY 1 DAY
 STARTS CURRENT_TIMESTAMP + INTERVAL 1 DAY
 DO
 BEGIN
-    DECLARE user_type VARCHAR(10);
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE res_id INT;
     DECLARE user_id INT;
-    
-    DELETE hr
-    FROM has_reserv hr
-    JOIN reservations r ON hr.resID = r.resID
-    WHERE DATEDIFF(CURRENT_DATE, r.res_date) > 7;
-    
-    SELECT r.userID, CASE
-        WHEN EXISTS(SELECT * FROM student WHERE userID = r.userID) THEN 'student'
-        WHEN EXISTS(SELECT * FROM teacher WHERE userID = r.userID) THEN 'teacher'
-    END INTO user_id, user_type
-    FROM reservations r
-    WHERE DATEDIFF(CURRENT_DATE, r.res_date) > 7;
-    
-    DELETE FROM reservations WHERE DATEDIFF(CURRENT_DATE, res_date) > 7;
-    
-    IF user_type = 'student' THEN
-        UPDATE student SET num_reserv = num_reserv + 1 WHERE userID = user_id;
-    ELSEIF user_type = 'teacher' THEN
-        UPDATE teacher SET num_reserv = num_reserv + 1 WHERE userID = user_id;
-    END IF;
+    DECLARE user_type VARCHAR(10);
+
+    DECLARE cur CURSOR FOR
+        SELECT r.resID , hr.userID , CASE
+            WHEN EXISTS(SELECT * FROM student s WHERE s.userID = hr.userID) THEN 'student'
+            WHEN EXISTS(SELECT * FROM teacher t WHERE t.userID = hr.userID) THEN 'teacher'
+        END AS user_type
+        FROM reservations r
+        JOIN has_reserv hr ON r.resID = hr.resID
+        WHERE DATEDIFF(CURRENT_DATE, r.res_date) > 7;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO res_id, user_id, user_type;
+
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        DELETE FROM has_reserv WHERE resID = res_id;
+
+        IF user_type = 'student' THEN
+            UPDATE student SET num_reserv = num_reserv - 1 WHERE userID = user_id;
+        ELSEIF user_type = 'teacher' THEN
+            UPDATE teacher SET num_reserv = num_reserv - 1 WHERE userID = user_id;
+        END IF;
+
+        DELETE FROM reservations WHERE resID = res_id;
+    END LOOP;
+
+    CLOSE cur;
 END //
 
 
@@ -348,7 +363,9 @@ BEGIN
     IF existing_reservations > 0 THEN
         DELETE FROM reservations WHERE resID = p_resID;
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Duplicate reservation not allowed for the same book and user. The previous reservation has been deleted.';
-    END IF;
+    ELSE 
+		INSERT INTO has_reserv (resID, userID) VALUES (p_resID, p_userID);
+	END IF;
 END //
 
 
@@ -357,20 +374,34 @@ END //
 
 CREATE PROCEDURE `insert_has_loan`(IN p_loanID INT, IN p_userID INT)
 BEGIN
-    DECLARE existing_loans INT;
+    DECLARE existing_delayed_loans INT;
+    DECLARE existing_same_book_loan INT;
 
-    SELECT COUNT(*) INTO existing_loans
+    -- Check for delayed loans
+    SELECT COUNT(*) INTO existing_delayed_loans
     FROM loans l
     JOIN has_loan hl ON hl.loanID = l.loanID
     WHERE hl.userID = p_userID AND l.active = 1 AND DATEDIFF(CURRENT_DATE, l.loan_date) > 7;
 
-    IF existing_loans > 0 THEN
+    IF existing_delayed_loans > 0 THEN
         CALL delete_loan(p_loanID);
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Delayed loan detected. The loan has been deleted.';
     ELSE
-        INSERT INTO has_loan (loanID, userID) VALUES (p_loanID, p_userID);
+        -- Check for loan of the same book
+        SELECT COUNT(*) INTO existing_same_book_loan
+        FROM loans l
+		join has_loan hs on hs.loanID = l.loanID
+        WHERE hs.userID = p_userID AND ISBN = (SELECT ISBN FROM loans WHERE loanID = p_loanID) AND l.active = 1;
+
+        IF existing_same_book_loan > 0 THEN
+            CALL delete_loan(p_loanID);
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You already have this book. The loan has been deleted.';
+        ELSE
+            INSERT INTO has_loan (loanID, userID) VALUES (p_loanID, p_userID);
+        END IF;
     END IF;
 END //
+
 
 CREATE PROCEDURE `delete_loan`(IN p_loanID INT)
 BEGIN
@@ -378,5 +409,3 @@ BEGIN
 END //
 
 DELIMITER ;
-
-
