@@ -21,16 +21,11 @@ db = mysql.connector.connect(
       database="lib1"
     )
 
+
+
 @app.route('/')
 def welcome():
-    import mysql.connector
 
-    db = mysql.connector.connect(
-      host="localhost",
-      user="root",
-      password="",
-      database="lib1"
-    )
     message = request.args.get('message')
     cursor = db.cursor()
     query ="""Select * from schools"""
@@ -42,14 +37,6 @@ def welcome():
 
 @app.route('/admin/schools_list')
 def schools_list():
-    import mysql.connector
-
-    db = mysql.connector.connect(
-      host="localhost",
-      user="root",
-      password="",
-      database="lib1"
-    )
 
     cursor = db.cursor()
     query ="""Select * from schools"""
@@ -66,12 +53,7 @@ def adminlogin():
 
 @app.route('/admlogin', methods=['POST'])
 def admlogin():
-    db = mysql.connector.connect(
-      host="localhost",
-      user="root",
-      password="",
-      database="lib1"
-    )
+
     username = request.form['username']
     password = request.form['password']
     cur = db.cursor()
@@ -82,6 +64,7 @@ def admlogin():
         return render_template('admlogin.html', message='Invalid username or password')
     else:
         return redirect(url_for('admin', adminID=admin[0]))
+
 
 @app.route('/admin/<int:adminID>')
 def admin(adminID):
