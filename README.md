@@ -19,6 +19,12 @@
 
 Το DML της βάσης βρίσκεται στο αρχείο insert.sql
 
+## Κώδικας για web server της εφαρμογής
+
+Server side: lib1.py
+
+Client side: templates
+
 ## requirements
 
 XAMPP\
