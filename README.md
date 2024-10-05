@@ -1,6 +1,6 @@
 # School Library Management System
 
-This project involves the creation of a database and a web application for managing school libraries. It was developed as part of the "Database Systems" course in the 6th semester, Track L, of the School of Electrical and Computer Engineering at the National Technical University of Athens (NTUA).
+This project involves the creation of a database and a web application for managing school libraries. It was developed as part of the "Database Systems" course in the 6th semester of the School of Electrical and Computer Engineering at the National Technical University of Athens (NTUA).
 
 ## Table of Contents
 - [Files](#files)
